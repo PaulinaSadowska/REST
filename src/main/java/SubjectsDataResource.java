@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * Created by Paulina Sadowska on 21.04.2016.
  */
 @Path("subjects")
-public class TestSubjectsData
+public class SubjectsDataResource
 {
     private Subjects subjectsList = new Subjects();
 
-    public TestSubjectsData()
+    public SubjectsDataResource()
     {
         subjectsList = new DataProvider().getSubjectsList();
     }

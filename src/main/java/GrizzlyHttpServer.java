@@ -14,7 +14,7 @@ public class GrizzlyHttpServer
     public static void main(String[] args) throws Exception
     {
         URI baseUri = UriBuilder.fromUri("http://localhost/").port(8000).build();
-        ResourceConfig config = new ResourceConfig(TestStudentsData.class, TestSubjectsData.class);
+        ResourceConfig config = new ResourceConfig(StudentsDataResource.class, SubjectsDataResource.class);
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
     }
 

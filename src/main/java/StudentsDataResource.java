@@ -14,11 +14,11 @@ import java.util.ArrayList;
  * Created by Paulina Sadowska on 15.04.2016.
  */
 @Path("students")
-public class TestStudentsData
+public class StudentsDataResource
 {
     private Students studentsList = new Students();
 
-    public TestStudentsData()
+    public StudentsDataResource()
     {
         studentsList = new DataProvider().getStudentsList();
     }
