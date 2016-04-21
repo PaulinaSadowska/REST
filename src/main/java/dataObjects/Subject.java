@@ -1,5 +1,6 @@
 package dataObjects;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,8 +12,13 @@ import java.util.Collection;
 @XmlRootElement
 public class Subject
 {
+    @NotNull
     private String name;
+
+    @NotNull
     private String teacher;
+
+    @NotNull
     private Collection<Grade> grades = new ArrayList<Grade>();
 
     public Subject(String name, String teacher){
@@ -44,15 +50,5 @@ public class Subject
 
     public Collection<Grade> getGrades(){
         return grades;
-    }
-
-    public String toString(){
-        String result =  "name: "+name+"\n"+
-                "teacher: "+teacher+"\n"+
-                "GRADES\n";
-        for(Grade grade: grades){
-            result += grade.toString()+"\n";
-        }
-        return result;
     }
 }

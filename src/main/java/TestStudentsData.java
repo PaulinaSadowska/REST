@@ -1,5 +1,6 @@
 import dataObjects.Student;
 import dataObjects.Students;
+import dataObjects.Subject;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -34,9 +35,13 @@ public class TestStudentsData
     @GET
     @Path("{studentId}")
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Student getStudent(@PathParam("studentId") String studentId)
+    public Response getStudent(@PathParam("studentId") String studentId)
     {
-        return studentsList.getStudent(Integer.parseInt(studentId));
+        Student result = studentsList.getStudent(Integer.parseInt(studentId));
+        if(result!=null)
+            return Response.ok(result).build();
+
+        return Response.status(Response.Status.NOT_FOUND).entity("Not found").build();
     }
 
     @POST

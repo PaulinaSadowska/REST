@@ -1,6 +1,8 @@
 package dataObjects;
 
+import javax.validation.constraints.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -12,12 +14,16 @@ import java.util.HashSet;
 @XmlRootElement
 public class Grade
 {
-    private static final HashSet<Double> validGrades = new HashSet<Double>(Arrays.asList(2.0, 3.0, 3.5, 4.0, 4.5, 5.0));
+    @NotNull
+    @DecimalMin("2.0")
+    @DecimalMax("5.0")
     private double grade;
-    private Date date;
+    @NotNull
     private int studentId;
+    @NotNull
+    private SimpleDate date;
 
-    public Grade(double grade, Date date, int id){
+    public Grade(double grade, SimpleDate date, int id){
         this.grade = grade;
         this.date = date;
         this.studentId = id;
@@ -27,7 +33,7 @@ public class Grade
     {
         return grade;
     }
-    public Date getDate()
+    public SimpleDate getDate()
     {
         return date;
     }
@@ -36,13 +42,12 @@ public class Grade
         return studentId;
     }
 
-    public void setDate(Date date)
+    public void setDate(SimpleDate date)
     {
         this.date = date;
     }
-    public void setGrade(double grade)
+    public void setGrade(long grade)
     {
-        if(validGrades.contains(grade))
             this.grade = grade;
     }
     public void setStudentId(int studentId)
