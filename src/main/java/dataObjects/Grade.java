@@ -23,6 +23,8 @@ public class Grade
     @NotNull
     private SimpleDate date;
 
+    public Grade(){}
+
     public Grade(double grade, SimpleDate date, int id){
         this.grade = grade;
         this.date = date;

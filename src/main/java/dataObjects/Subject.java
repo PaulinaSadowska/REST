@@ -18,10 +18,14 @@ public class Subject
     @NotNull
     private String teacher;
 
-    @NotNull
-    private Collection<Grade> grades = new ArrayList<Grade>();
+    public Subject()
+    {
+    }
 
-    public Subject(String name, String teacher){
+    private ArrayList<Grade> grades = new ArrayList<Grade>();
+
+    public Subject(String name, String teacher)
+    {
         this.name = name;
         this.teacher = teacher;
     }
@@ -30,6 +34,7 @@ public class Subject
     {
         return name;
     }
+
     public void setName(String name)
     {
         this.name = name;
@@ -39,16 +44,57 @@ public class Subject
     {
         return teacher;
     }
+
     public void setTeacher(String teacher)
     {
         this.teacher = teacher;
     }
 
-    public void addGrade(Grade grade){
+    public void addGrade(Grade grade)
+    {
         grades.add(grade);
     }
 
-    public Collection<Grade> getGrades(){
+    public ArrayList<Grade> getGrades()
+    {
         return grades;
+    }
+
+    public Grade getGrade(int studentId)
+    {
+        for (Grade g : grades)
+        {
+            if (g.getStudentId() == studentId)
+            {
+                return g;
+            }
+        }
+        return null;
+    }
+
+
+    public boolean editGrade(Grade grade)
+    {
+        for (Grade g : grades)
+        {
+            if (g.getStudentId() == grade.getStudentId())
+            {
+                grades.remove(g);
+                grades.add(grade);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteGrade(int studentId)
+    {
+        Grade g = getGrade(studentId);
+        if (g != null)
+        {
+            grades.remove(g);
+            return true;
+        }
+        return false;
     }
 }

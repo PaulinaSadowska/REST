@@ -36,9 +36,9 @@ public class TestStudentsData
     @GET
     @Path("{studentId}")
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getStudent(@PathParam("studentId") String studentId)
+    public Response getStudent(@PathParam("studentId") int studentId)
     {
-        Student result = studentsList.getStudent(Integer.parseInt(studentId));
+        Student result = studentsList.getStudent(studentId);
         if(result!=null)
             return Response.ok(result).build();
 
@@ -51,12 +51,12 @@ public class TestStudentsData
         if(studentsList.getStudent(student.getId())==null)
         {
             studentsList.addStudent(student);
-            return Response.status(201).
+            return Response.status(Response.Status.CREATED).
                     entity("student added").
                     type("text/plain").
                     build();
         }
-        return Response.status(409).
+        return Response.status(Response.Status.CONFLICT).
                 entity("student already exists").
                 type("text/plain").
                 build();
@@ -68,12 +68,12 @@ public class TestStudentsData
         if(studentsList.getStudent(student.getId())!=null)
         {
             studentsList.editStudent(student);
-            return Response.status(200).
+            return Response.status(Response.Status.OK).
                     entity("student data edited successfully").
                     type("text/plain").
                     build();
         }
-        return Response.status(409).
+        return Response.status(Response.Status.NOT_FOUND).
                 entity("student don't exists").
                 type("text/plain").
                 build();
@@ -81,16 +81,16 @@ public class TestStudentsData
 
     @DELETE
     @Path("{studentId}")
-    public Response deleteStudent(@PathParam("studentId") String studentId){
-        if(studentsList.getStudent(Integer.parseInt(studentId))!=null)
+    public Response deleteStudent(@PathParam("studentId") int studentId){
+        if(studentsList.getStudent(studentId)!=null)
         {
-            studentsList.deleteStudent(Integer.parseInt(studentId));
-            return Response.status(200).
+            studentsList.deleteStudent(studentId);
+            return Response.status(Response.Status.OK).
                     entity("student " + studentId + " deleted successfully").
                     type("text/plain").
                     build();
         }
-        return Response.status(409).
+        return Response.status(Response.Status.NOT_FOUND).
                 entity("student don't exists").
                 type("text/plain").
                 build();

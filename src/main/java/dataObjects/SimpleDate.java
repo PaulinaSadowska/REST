@@ -24,6 +24,9 @@ public class SimpleDate
     @Max(31)
     private int day;
 
+    public SimpleDate(){
+    }
+
     public SimpleDate(int year, int month, int day){
         this.year = year;
         this.month = month;

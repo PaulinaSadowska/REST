@@ -1,6 +1,7 @@
 package dataObjects;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -30,5 +31,32 @@ public class Subjects
             }
         }
         return null;
+    }
+
+    public Grade getStudentGrade(String subjectName, int studentId)
+    {
+        Subject subject = getSubject(subjectName);
+        return subject.getGrade(studentId);
+    }
+
+    public ArrayList<Grade> getGrades(String subjectName)
+    {
+        Subject subject = getSubject(subjectName);
+        if(subject!=null)
+            return subject.getGrades();
+
+        return null;
+
+    }
+
+    public void editSubject(Subject subjectToEdit, Subject subject)
+    {
+        subjectsList.remove(subjectToEdit);
+        subjectsList.add(subject);
+    }
+
+    public void deleteSubject(String subjectName)
+    {
+        subjectsList.remove(getSubject(subjectName));
     }
 }
