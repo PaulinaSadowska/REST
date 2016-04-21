@@ -20,13 +20,12 @@ public class TestStudentsData
 
     public TestStudentsData()
     {
-        studentsList.addStudent(new Student(1, "Kasia", "Kowalska", new SimpleDate(1990, 2, 1)));
-        studentsList.addStudent(new Student(2, "Pawel", "Kkkk", new SimpleDate(1993, 6, 7)));
+        studentsList = new DataProvider().getStudentsList();
     }
 
 
     @GET
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public ArrayList<Student> getAllStudents()
     {
         return studentsList.getStudentsList();
@@ -35,7 +34,7 @@ public class TestStudentsData
 
     @GET
     @Path("{studentId}")
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getStudent(@PathParam("studentId") int studentId)
     {
         Student result = studentsList.getStudent(studentId);

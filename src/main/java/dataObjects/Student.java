@@ -1,11 +1,7 @@
 package dataObjects;
 
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.FormParam;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.

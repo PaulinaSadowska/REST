@@ -17,16 +17,12 @@ public class TestSubjectsData
 
     public TestSubjectsData()
     {
-        Subject subject1 = new Subject("Czarna magia", "Dumbledore");
-        subject1.addGrade(new Grade(2.0, new SimpleDate(2016, 3, 4), 1));
-        subject1.addGrade(new Grade(4.0, new SimpleDate(2016, 4, 1), 2));
-        subjectsList.addSubject(subject1);
-
+        subjectsList = new DataProvider().getSubjectsList();
     }
 
 
     @GET
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public ArrayList<Subject> getAllSubjects()
     {
         return subjectsList.getSubjectsList();
@@ -34,7 +30,7 @@ public class TestSubjectsData
 
     @GET
     @Path("{subjectName}")
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getSubjects(@PathParam("subjectName") String subjectName)
     {
         Subject result = subjectsList.getSubject(subjectName);
@@ -46,7 +42,7 @@ public class TestSubjectsData
 
     @GET
     @Path("{subjectName}/grades")
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getGrades(@PathParam("subjectName") String subjectName)
     {
         ArrayList<Grade> result = subjectsList.getGrades(subjectName);
@@ -58,7 +54,7 @@ public class TestSubjectsData
 
     @GET
     @Path("{subjectName}/grades/{studentId}")
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getStudentGrade(@PathParam("subjectName") String subjectName, @PathParam("studentId") int studentId)
     {
         Grade result = subjectsList.getStudentGrade(subjectName, studentId);

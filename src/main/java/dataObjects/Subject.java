@@ -3,7 +3,7 @@ package dataObjects;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
-import java.util.Collection;
+
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
