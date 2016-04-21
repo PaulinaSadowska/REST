@@ -1,3 +1,6 @@
+import dataObjects.Student;
+import dataObjects.Students;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -14,6 +17,7 @@ public class TestStudentsData
 
     public TestStudentsData(){
         studentsList.addStudent(new Student(1, "Kasia", "Kowalska", new Date(1993, 6, 2)));
+        studentsList.addStudent(new Student(2, "Pawel", "Kkkk", new Date(1945, 1, 2)));
     }
 
     /**
@@ -24,8 +28,8 @@ public class TestStudentsData
      */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getStudent()
+    public String getAllStudents()
     {
-        return studentsList.getStudent(1).toString();
+        return studentsList.toString();
     }
 }

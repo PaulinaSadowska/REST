@@ -1,3 +1,5 @@
+package dataObjects;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
 import java.util.Date;
