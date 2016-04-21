@@ -24,13 +24,13 @@ public class Student
         private String surname;
 
         @NotNull
-        private String birthDate;
+        private SimpleDate birthDate;
 
         //Introducing the dummy constructor
         public Student() {
         }
 
-        public Student(int id, String name, String surname, String birthDate){
+        public Student(int id, String name, String surname, SimpleDate birthDate){
                 this.id = id;
                 this.name = name;
                 this.surname = surname;
@@ -52,7 +52,7 @@ public class Student
                 return surname;
         }
 
-        public String getBirthDate()
+        public SimpleDate getBirthDate()
         {
                 return birthDate;
         }
@@ -72,7 +72,7 @@ public class Student
                 this.surname = surname;
         }
 
-        public void setBirthDate(String birthDate)
+        public void setBirthDate(SimpleDate birthDate)
         {
                 this.birthDate = birthDate;
         }

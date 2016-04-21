@@ -1,3 +1,4 @@
+import dataObjects.SimpleDate;
 import dataObjects.Student;
 import dataObjects.Students;
 import dataObjects.Subject;
@@ -19,8 +20,8 @@ public class TestStudentsData
 
     public TestStudentsData()
     {
-        studentsList.addStudent(new Student(1, "Kasia", "Kowalska", "1993-6-7"));
-        studentsList.addStudent(new Student(2, "Pawel", "Kkkk", "1993-6-7"));
+        studentsList.addStudent(new Student(1, "Kasia", "Kowalska", new SimpleDate(1990, 2, 1)));
+        studentsList.addStudent(new Student(2, "Pawel", "Kkkk", new SimpleDate(1993, 6, 7)));
     }
 
 
