@@ -28,7 +28,6 @@ public class Student
 
         //Introducing the dummy constructor
         public Student() {
-                id = 9;
         }
 
         public Student(int id, String name, String surname, String birthDate){
@@ -78,9 +77,4 @@ public class Student
                 this.birthDate = birthDate;
         }
 
-        public String toString(){
-                return "STUDENT: " + getId() + "\n"
-                        + getName() + " " + getSurname() + "\n"
-                        + getBirthDate().toString();
-        }
 }

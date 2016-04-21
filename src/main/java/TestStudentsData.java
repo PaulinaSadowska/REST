@@ -1,6 +1,8 @@
 import dataObjects.Student;
 import dataObjects.Students;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -22,7 +24,7 @@ public class TestStudentsData
 
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public ArrayList<Student> getAllStudents()
     {
         return studentsList.getStudentsList();
@@ -31,7 +33,7 @@ public class TestStudentsData
 
     @GET
     @Path("{studentId}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Student getStudent(@PathParam("studentId") String studentId)
     {
         return studentsList.getStudent(Integer.parseInt(studentId));
@@ -39,7 +41,7 @@ public class TestStudentsData
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addStudent(Student student){
+    public Response addStudent(@NotNull @Valid Student student){
         if(studentsList.getStudent(student.getId())==null)
         {
             studentsList.addStudent(student);
@@ -87,7 +89,4 @@ public class TestStudentsData
                 type("text/plain").
                 build();
     }
-
-
-
 }

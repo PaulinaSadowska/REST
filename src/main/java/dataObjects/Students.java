@@ -34,17 +34,6 @@ public class Students
         return null;
     }
 
-    @Override
-    public String toString()
-    {
-        String result="";
-        for(Student s: studentsList){
-            result += s.toString();
-            result += "\n\n";
-        }
-        return result;
-    }
-
     public void editStudent(Student student)
     {
         for (int i = 0; i < studentsList.size(); i++)
