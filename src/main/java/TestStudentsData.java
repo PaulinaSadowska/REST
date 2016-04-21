@@ -4,6 +4,7 @@ import dataObjects.Students;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
@@ -22,9 +23,9 @@ public class TestStudentsData
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Students getAllStudents()
+    public ArrayList<Student> getAllStudents()
     {
-        return studentsList;
+        return studentsList.getStudentsList();
     }
 
 
@@ -69,5 +70,24 @@ public class TestStudentsData
                 type("text/plain").
                 build();
     }
+
+    @DELETE
+    @Path("{studentId}")
+    public Response deleteStudent(@PathParam("studentId") String studentId){
+        if(studentsList.getStudent(Integer.parseInt(studentId))!=null)
+        {
+            studentsList.deleteStudent(Integer.parseInt(studentId));
+            return Response.status(200).
+                    entity("student " + studentId + " deleted successfully").
+                    type("text/plain").
+                    build();
+        }
+        return Response.status(409).
+                entity("student don't exists").
+                type("text/plain").
+                build();
+    }
+
+
 
 }

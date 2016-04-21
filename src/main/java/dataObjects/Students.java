@@ -1,6 +1,6 @@
 package dataObjects;
 
-import javax.validation.constraints.NotNull;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 
@@ -11,8 +11,11 @@ import java.util.ArrayList;
 @XmlRootElement
 public class Students
 {
-    @NotNull
     private ArrayList<Student> studentsList = new ArrayList<Student>();
+
+    public ArrayList<Student> getStudentsList(){
+        return studentsList;
+    }
 
     public Students()
     {
@@ -50,6 +53,15 @@ public class Students
                 studentsList.remove(i);
                 studentsList.add(i, student);
                 return;
+            }
+        }
+    }
+
+    public void deleteStudent(int studentId)
+    {
+        for(Student s: studentsList){
+            if(s.getId()==studentId){
+                studentsList.remove(s);
             }
         }
     }
