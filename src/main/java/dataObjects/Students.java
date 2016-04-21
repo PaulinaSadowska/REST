@@ -1,5 +1,7 @@
 package dataObjects;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 
@@ -50,6 +52,7 @@ public class Students
         for(Student s: studentsList){
             if(s.getId()==studentId){
                 studentsList.remove(s);
+                return;
             }
         }
     }

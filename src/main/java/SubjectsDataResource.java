@@ -88,11 +88,19 @@ public class SubjectsDataResource
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addGrade(@PathParam("subjectName") String subjectName, @NotNull @Valid Grade grade)
     {
-        if (subjectsList.getSubject(subjectName) != null)
+        Subject subject = subjectsList.getSubject(subjectName);
+        if (subject != null)
         {
-            subjectsList.getSubject(subjectName).addGrade(grade);
-            return Response.status(Response.Status.CREATED).
-                    entity("grade added").
+            if (subject.getGrade(grade.getStudentId()) == null)
+            {
+                subject.addGrade(grade);
+                return Response.status(Response.Status.CREATED).
+                        entity("grade added").
+                        type("text/plain").
+                        build();
+            }
+            return Response.status(Response.Status.CONFLICT).
+                    entity("grade already exists").
                     type("text/plain").
                     build();
         }
@@ -137,9 +145,13 @@ public class SubjectsDataResource
                         type("text/plain").
                         build();
             }
+            return Response.status(Response.Status.NOT_FOUND).
+                    entity("grade don't exist").
+                    type("text/plain").
+                    build();
         }
         return Response.status(Response.Status.NOT_FOUND).
-                entity("grade don't exist").
+                entity("subject don't exist").
                 type("text/plain").
                 build();
     }
