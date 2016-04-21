@@ -1,11 +1,9 @@
 import dataObjects.Student;
 import dataObjects.Students;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Date;
+import javax.ws.rs.core.Response;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
@@ -15,21 +13,61 @@ public class TestStudentsData
 {
     private Students studentsList = new Students();
 
-    public TestStudentsData(){
-        studentsList.addStudent(new Student(1, "Kasia", "Kowalska", new Date(1993, 6, 2)));
-        studentsList.addStudent(new Student(2, "Pawel", "Kkkk", new Date(1945, 1, 2)));
+    public TestStudentsData()
+    {
+        studentsList.addStudent(new Student(1, "Kasia", "Kowalska", "1993-6-7"));
+        studentsList.addStudent(new Student(2, "Pawel", "Kkkk", "1993-6-7"));
     }
 
-    /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
-     */
+
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getAllStudents()
+    @Produces(MediaType.APPLICATION_JSON)
+    public Students getAllStudents()
     {
-        return studentsList.toString();
+        return studentsList;
     }
+
+
+    @GET
+    @Path("{studentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Student getStudent(@PathParam("studentId") String studentId)
+    {
+        return studentsList.getStudent(Integer.parseInt(studentId));
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addStudent(Student student){
+        if(studentsList.getStudent(student.getId())==null)
+        {
+            studentsList.addStudent(student);
+            return Response.status(201).
+                    entity("student added").
+                    type("text/plain").
+                    build();
+        }
+        return Response.status(409).
+                entity("student already exists").
+                type("text/plain").
+                build();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response editStudent(Student student){
+        if(studentsList.getStudent(student.getId())!=null)
+        {
+            studentsList.editStudent(student);
+            return Response.status(200).
+                    entity("student data edited successfully").
+                    type("text/plain").
+                    build();
+        }
+        return Response.status(409).
+                entity("student don't exists").
+                type("text/plain").
+                build();
+    }
+
 }
