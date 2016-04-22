@@ -1,10 +1,7 @@
-package dataObjects;
+package server.dataObjects;
 
 import javax.validation.constraints.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.

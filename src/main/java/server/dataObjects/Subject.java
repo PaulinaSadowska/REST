@@ -1,8 +1,7 @@
-package dataObjects;
+package server.dataObjects;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
 
 
 /**
@@ -20,7 +19,7 @@ public class Subject
     @NotNull
     private String teacher;
 
-    private Grades grades = new Grades();
+    private Grades grades;
 
     public Subject()
     {
@@ -31,6 +30,7 @@ public class Subject
         this.id = id;
         this.name = name;
         this.teacher = teacher;
+        grades = new Grades();
     }
 
     public String getName()
@@ -61,6 +61,11 @@ public class Subject
     public Grades getGrades()
     {
         return grades;
+    }
+
+    public void setGrades(Grades grades)
+    {
+        this.grades = grades;
     }
 
     public Grade getGrade(int studentId)

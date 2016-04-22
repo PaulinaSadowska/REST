@@ -1,7 +1,7 @@
-import dataObjects.SimpleDate;
-import dataObjects.Student;
-import dataObjects.Students;
-import dataObjects.Subject;
+package server;
+
+import server.dataObjects.Student;
+import server.dataObjects.Students;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,7 +17,8 @@ import java.util.ArrayList;
 @Path("students")
 public class StudentsDataResource
 {
-    private Students studentsList = new Students();
+    private Students studentsList;
+
     @Context
     UriInfo uriInfo;
 
@@ -29,9 +30,9 @@ public class StudentsDataResource
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public ArrayList<Student> getAllStudents()
+    public Response getAllStudents()
     {
-        return studentsList.getStudentsList();
+        return Response.ok(studentsList).build();
     }
 
 

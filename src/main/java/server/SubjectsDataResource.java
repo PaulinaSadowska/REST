@@ -1,4 +1,8 @@
-import dataObjects.*;
+package server;
+
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+import server.dataObjects.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

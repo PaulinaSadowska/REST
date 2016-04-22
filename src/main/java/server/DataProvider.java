@@ -1,6 +1,6 @@
-import dataObjects.*;
+package server;
 
-import javax.inject.Singleton;
+import server.dataObjects.*;
 
 /**
  * Created by Paulina Sadowska on 21.04.2016.

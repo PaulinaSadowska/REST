@@ -1,6 +1,11 @@
-package dataObjects;
+package server.dataObjects;
+
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import server.StudentsDataResource;
 
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -10,6 +15,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Student
 {
+        @InjectLink(resource = StudentsDataResource.class, method="getStudent",
+                bindings ={@Binding(name = "studentId", value = "${instance.id}")}, style =  InjectLink.Style.ABSOLUTE)
+        //TODO - repair so it shows correctly in xml
+        private Link view; //will hold the link to view account details
+
         private int id;
 
         @NotNull
@@ -71,5 +81,16 @@ public class Student
         {
                 this.birthDate = birthDate;
         }
+
+        public Link getView()
+        {
+                return view;
+        }
+
+        public void setView(Link view)
+        {
+                this.view = view;
+        }
+
 
 }
