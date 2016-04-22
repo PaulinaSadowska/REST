@@ -19,8 +19,16 @@ public class Subjects
     {
     }
 
-    public void addSubject(Subject subject){
+    public int addSubject(Subject subject){
+        int id = getAvailablaId();
+        subject.setId(id);
         subjectsList.add(subject);
+        return id;
+    }
+
+    private int getAvailablaId(){
+        int id = subjectsList.get(subjectsList.size()-1).getId();
+        return ++id;
     }
 
     public Subject getSubject(String subjectName){

@@ -6,8 +6,9 @@ import dataObjects.Subject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
@@ -17,10 +18,12 @@ import java.util.ArrayList;
 public class StudentsDataResource
 {
     private Students studentsList = new Students();
+    @Context
+    UriInfo uriInfo;
 
     public StudentsDataResource()
     {
-        studentsList = new DataProvider().getStudentsList();
+        studentsList = DataProvider.getInstance().getStudentsList();
     }
 
 
@@ -46,11 +49,17 @@ public class StudentsDataResource
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addStudent(@NotNull @Valid Student student){
+    public Response addStudent(@NotNull @Valid Student student) throws URISyntaxException
+    {
         if(studentsList.getStudent(student.getId())==null)
         {
+            int id = studentsList.getAvailableStudentId();
+            student.setId(id);
             studentsList.addStudent(student);
-            return Response.status(Response.Status.CREATED).
+            UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+            URI userUri = ub.path(id+"").build();
+            return Response.created(userUri).
+                    status(Response.Status.CREATED).
                     entity("student added").
                     type("text/plain").
                     build();

@@ -12,6 +12,8 @@ import java.util.ArrayList;
 @XmlRootElement
 public class Subject
 {
+    private int id;
+
     @NotNull
     private String name;
 
@@ -24,8 +26,9 @@ public class Subject
 
     private ArrayList<Grade> grades = new ArrayList<Grade>();
 
-    public Subject(String name, String teacher)
+    public Subject(int id, String name, String teacher)
     {
+        this.id = id;
         this.name = name;
         this.teacher = teacher;
     }
@@ -96,5 +99,15 @@ public class Subject
             return true;
         }
         return false;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 }

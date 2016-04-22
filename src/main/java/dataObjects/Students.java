@@ -26,6 +26,11 @@ public class Students
         studentsList.add(student);
     }
 
+    public int getAvailableStudentId(){
+        int i = studentsList.get(studentsList.size()-1).getId();
+        return ++i;
+    }
+
     public Student getStudent(int studentId){
         for(Student s: studentsList){
             if(s.getId()==studentId){

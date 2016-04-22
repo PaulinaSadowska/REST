@@ -3,8 +3,8 @@ import dataObjects.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.ArrayList;
 
 /**
@@ -15,9 +15,12 @@ public class SubjectsDataResource
 {
     private Subjects subjectsList = new Subjects();
 
+    @Context
+    UriInfo uriInfo;
+
     public SubjectsDataResource()
     {
-        subjectsList = new DataProvider().getSubjectsList();
+        subjectsList = DataProvider.getInstance().getSubjectsList();
     }
 
 
@@ -71,8 +74,13 @@ public class SubjectsDataResource
     {
         if (subjectsList.getSubject(subject.getName()) == null)
         {
-            subjectsList.addSubject(subject);
-            return Response.status(Response.Status.CREATED).
+
+            int id = subjectsList.addSubject(subject);
+            UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+            URI subjectUri = ub.path(id+"").build();
+            return Response.
+                    created(subjectUri).
+                    status(Response.Status.CREATED).
                     entity("subject added").
                     type("text/plain").
                     build();
@@ -93,8 +101,12 @@ public class SubjectsDataResource
         {
             if (subject.getGrade(grade.getStudentId()) == null)
             {
+                UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+                URI gradeUri = ub.path(grade.getStudentId()+"").build();
                 subject.addGrade(grade);
-                return Response.status(Response.Status.CREATED).
+                return Response.
+                        created(gradeUri).
+                        status(Response.Status.CREATED).
                         entity("grade added").
                         type("text/plain").
                         build();

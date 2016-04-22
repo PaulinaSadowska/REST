@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Student
 {
-        @NotNull
         private int id;
 
         @NotNull
