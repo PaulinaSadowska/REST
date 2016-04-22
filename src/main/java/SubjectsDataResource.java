@@ -74,8 +74,9 @@ public class SubjectsDataResource
     {
         if (subjectsList.getSubject(subject.getName()) == null)
         {
-
-            int id = subjectsList.addSubject(subject);
+            int id = subjectsList.getAvailableId();
+            subject.setId(id);
+            subjectsList.addSubject(subject);
             UriBuilder ub = uriInfo.getAbsolutePathBuilder();
             URI subjectUri = ub.path(id+"").build();
             return Response.

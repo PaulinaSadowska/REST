@@ -19,14 +19,11 @@ public class Subjects
     {
     }
 
-    public int addSubject(Subject subject){
-        int id = getAvailablaId();
-        subject.setId(id);
+    public void addSubject(Subject subject){
         subjectsList.add(subject);
-        return id;
     }
 
-    private int getAvailablaId(){
+    public int getAvailableId(){
         int id = subjectsList.get(subjectsList.size()-1).getId();
         return ++id;
     }

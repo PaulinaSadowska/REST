@@ -8,10 +8,13 @@ import javax.inject.Singleton;
 public class DataProvider
 {
 
-    private static DataProvider dataProvider = new DataProvider();
+    private static DataProvider dataProvider;
 
     /* Static 'instance' method */
     public static DataProvider getInstance( ) {
+        if(dataProvider==null)
+            dataProvider = new DataProvider();
+
         return dataProvider;
     }
 

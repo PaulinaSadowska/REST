@@ -58,7 +58,8 @@ public class StudentsDataResource
             studentsList.addStudent(student);
             UriBuilder ub = uriInfo.getAbsolutePathBuilder();
             URI userUri = ub.path(id+"").build();
-            return Response.created(userUri).
+            return Response.
+                    created(userUri).
                     status(Response.Status.CREATED).
                     entity("student added").
                     type("text/plain").
