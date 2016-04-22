@@ -32,11 +32,11 @@ public class SubjectsDataResource
     }
 
     @GET
-    @Path("{subjectName}")
+    @Path("{subjectId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getSubjects(@PathParam("subjectName") String subjectName)
+    public Response getSubjects(@PathParam("subjectId") int subjectId)
     {
-        Subject result = subjectsList.getSubject(subjectName);
+        Subject result = subjectsList.getSubject(subjectId);
         if (result != null)
             return Response.ok(result).build();
 
@@ -44,11 +44,11 @@ public class SubjectsDataResource
     }
 
     @GET
-    @Path("{subjectName}/grades")
+    @Path("{subjectId}/grades")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getGrades(@PathParam("subjectName") String subjectName)
+    public Response getGrades(@PathParam("subjectId") int subjectId)
     {
-        ArrayList<Grade> result = subjectsList.getGrades(subjectName);
+        Grades result = subjectsList.getGrades(subjectId);
         if (result != null)
             return Response.ok(result).build();
 
@@ -56,11 +56,11 @@ public class SubjectsDataResource
     }
 
     @GET
-    @Path("{subjectName}/grades/{studentId}")
+    @Path("{subjectId}/grades/{studentId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getStudentGrade(@PathParam("subjectName") String subjectName, @PathParam("studentId") int studentId)
+    public Response getStudentGrade(@PathParam("subjectId") int subjectId, @PathParam("studentId") int studentId)
     {
-        Grade result = subjectsList.getStudentGrade(subjectName, studentId);
+        Grade result = subjectsList.getStudentGrade(subjectId, studentId);
         if (result != null)
             return Response.ok(result).build();
 
@@ -69,10 +69,10 @@ public class SubjectsDataResource
 
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addSubject(Subject subject)
     {
-        if (subjectsList.getSubject(subject.getName()) == null)
+        if (subjectsList.getSubject(subject.getId()) == null)
         {
             int id = subjectsList.getAvailableId();
             subject.setId(id);
@@ -93,11 +93,11 @@ public class SubjectsDataResource
     }
 
     @POST
-    @Path("{subjectName}/grades")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addGrade(@PathParam("subjectName") String subjectName, @NotNull @Valid Grade grade)
+    @Path("{subjectId}/grades")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response addGrade(@PathParam("subjectId") int subjectId, @NotNull @Valid Grade grade)
     {
-        Subject subject = subjectsList.getSubject(subjectName);
+        Subject subject = subjectsList.getSubject(subjectId);
         if (subject != null)
         {
             if (subject.getGrade(grade.getStudentId()) == null)
@@ -124,10 +124,10 @@ public class SubjectsDataResource
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response editSubject(Subject subject)
     {
-        Subject subjectToEdit = subjectsList.getSubject(subject.getName());
+        Subject subjectToEdit = subjectsList.getSubject(subject.getId());
         if (subjectToEdit != null)
         {
             subjectsList.editSubject(subjectToEdit, subject);
@@ -144,11 +144,11 @@ public class SubjectsDataResource
 
 
     @PUT
-    @Path("{subjectName}/grades")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response editGrade(@PathParam("subjectName") String subjectName, Grade grade)
+    @Path("{subjectId}/grades")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response editGrade(@PathParam("subjectId") int subjectId, Grade grade)
     {
-        Subject subjectToEdit = subjectsList.getSubject(subjectName);
+        Subject subjectToEdit = subjectsList.getSubject(subjectId);
         if (subjectToEdit != null)
         {
             if (subjectToEdit.editGrade(grade))
@@ -170,14 +170,14 @@ public class SubjectsDataResource
     }
 
     @DELETE
-    @Path("{subjectName}")
-    public Response deleteSubject(@PathParam("subjectName") String subjectName)
+    @Path("{subjectId}")
+    public Response deleteSubject(@PathParam("subjectId") int subjectId)
     {
-        if (subjectsList.getSubject(subjectName) != null)
+        if (subjectsList.getSubject(subjectId) != null)
         {
-            subjectsList.deleteSubject(subjectName);
+            subjectsList.deleteSubject(subjectId);
             return Response.status(Response.Status.OK).
-                    entity("subject " + subjectName + " deleted successfully").
+                    entity("subject " + subjectId + " deleted successfully").
                     type("text/plain").
                     build();
         }
@@ -188,10 +188,10 @@ public class SubjectsDataResource
     }
 
     @DELETE
-    @Path("{subjectName}/grades/{studentId}")
-    public Response deleteGrade(@PathParam("subjectName") String subjectName, @PathParam("studentId") int studentId)
+    @Path("{subjectId}/grades/{studentId}")
+    public Response deleteGrade(@PathParam("subjectId") int subjectId, @PathParam("studentId") int studentId)
     {
-        Subject subject = subjectsList.getSubject(subjectName);
+        Subject subject = subjectsList.getSubject(subjectId);
         if (subject != null)
         {
             if (subject.deleteGrade(studentId))

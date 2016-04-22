@@ -28,24 +28,26 @@ public class Subjects
         return ++id;
     }
 
-    public Subject getSubject(String subjectName){
+
+    public Subject getSubject(int subjectId){
         for(Subject s: subjectsList){
-            if(s.getName().equals(subjectName)){
+            if(s.getId() == subjectId){
                 return s;
             }
         }
         return null;
     }
 
-    public Grade getStudentGrade(String subjectName, int studentId)
+    public Grade getStudentGrade(int subjectId, int studentId)
     {
-        Subject subject = getSubject(subjectName);
+        Subject subject = getSubject(subjectId);
         return subject.getGrade(studentId);
     }
 
-    public ArrayList<Grade> getGrades(String subjectName)
+
+    public Grades getGrades(int subjectId)
     {
-        Subject subject = getSubject(subjectName);
+        Subject subject = getSubject(subjectId);
         if(subject!=null)
             return subject.getGrades();
 
@@ -59,8 +61,8 @@ public class Subjects
         subjectsList.add(subject);
     }
 
-    public void deleteSubject(String subjectName)
+    public void deleteSubject(int subjectId)
     {
-        subjectsList.remove(getSubject(subjectName));
+        subjectsList.remove(getSubject(subjectId));
     }
 }

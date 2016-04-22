@@ -1,13 +1,16 @@
 package dataObjects;
 
 import javax.validation.constraints.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
  */
 //obiekt stanowiący zawierający wartość liczbową (2.0 – 5.0), datę wystawienia i przypisanego studenta
-@XmlRootElement
+@XmlRootElement(name="grades")
 public class Grade
 {
     @NotNull
@@ -24,7 +27,7 @@ public class Grade
     public Grade(){}
 
     public Grade(double grade, SimpleDate date, int id){
-        this.grade = grade;
+        this.grade = (int)grade;
         this.date = date;
         this.studentId = id;
     }
@@ -46,7 +49,7 @@ public class Grade
     {
         this.date = date;
     }
-    public void setGrade(long grade)
+    public void setGrade(double grade)
     {
             this.grade = grade;
     }

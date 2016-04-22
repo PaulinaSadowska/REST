@@ -48,7 +48,7 @@ public class StudentsDataResource
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addStudent(@NotNull @Valid Student student) throws URISyntaxException
     {
         if(studentsList.getStudent(student.getId())==null)
@@ -72,7 +72,7 @@ public class StudentsDataResource
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response editStudent(Student student){
         if(studentsList.getStudent(student.getId())!=null)
         {

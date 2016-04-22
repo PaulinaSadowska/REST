@@ -20,11 +20,11 @@ public class Subject
     @NotNull
     private String teacher;
 
+    private Grades grades = new Grades();
+
     public Subject()
     {
     }
-
-    private ArrayList<Grade> grades = new ArrayList<Grade>();
 
     public Subject(int id, String name, String teacher)
     {
@@ -58,14 +58,14 @@ public class Subject
         grades.add(grade);
     }
 
-    public ArrayList<Grade> getGrades()
+    public Grades getGrades()
     {
         return grades;
     }
 
     public Grade getGrade(int studentId)
     {
-        for (Grade g : grades)
+        for (Grade g : grades.getGrades())
         {
             if (g.getStudentId() == studentId)
             {
@@ -78,7 +78,7 @@ public class Subject
 
     public boolean editGrade(Grade grade)
     {
-        for (Grade g : grades)
+        for (Grade g : grades.getGrades())
         {
             if (g.getStudentId() == grade.getStudentId())
             {
