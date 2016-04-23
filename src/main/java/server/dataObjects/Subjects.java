@@ -1,7 +1,17 @@
 package server.dataObjects;
 
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+import server.StudentsDataResource;
+import server.SubjectsDataResource;
+
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paulina Sadowska on 21.04.2016.
@@ -9,11 +19,16 @@ import java.util.ArrayList;
 @XmlRootElement
 public class Subjects
 {
-    private ArrayList<Subject> subjectsList = new ArrayList<Subject>();
+    @InjectLinks({
+            @InjectLink(resource = StudentsDataResource.class, rel = "students"),
+            @InjectLink(resource = SubjectsDataResource.class, rel = "self")
+    })
+    @XmlElement(name="link")
+    @XmlElementWrapper(name = "links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    List<Link> links;
 
-    public ArrayList<Subject> getSubjectsList(){
-        return subjectsList;
-    }
+    private ArrayList<Subject> subjectsList = new ArrayList<Subject>();
 
     public Subjects()
     {
@@ -65,4 +80,24 @@ public class Subjects
     {
         subjectsList.remove(getSubject(subjectId));
     }
+
+    public List<Link> getLinks()
+    {
+        return links;
+    }
+
+    public void setLinks(List<Link> links)
+    {
+        this.links = links;
+    }
+
+    public ArrayList<Subject> getSubjectsList(){
+        return subjectsList;
+    }
+
+    public void setSubjectsList(ArrayList<Subject> subjectsList)
+    {
+        this.subjectsList = subjectsList;
+    }
+
 }

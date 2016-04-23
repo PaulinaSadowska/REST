@@ -30,9 +30,9 @@ public class SubjectsDataResource
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public ArrayList<Subject> getAllSubjects()
+    public Response getAllSubjects()
     {
-        return subjectsList.getSubjectsList();
+        return Response.ok(subjectsList).build();
     }
 
     @GET
