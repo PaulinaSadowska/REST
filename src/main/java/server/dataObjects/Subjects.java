@@ -81,16 +81,6 @@ public class Subjects
         subjectsList.remove(getSubject(subjectId));
     }
 
-    public List<Link> getLinks()
-    {
-        return links;
-    }
-
-    public void setLinks(List<Link> links)
-    {
-        this.links = links;
-    }
-
     public ArrayList<Subject> getSubjectsList(){
         return subjectsList;
     }

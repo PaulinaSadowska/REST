@@ -26,7 +26,7 @@ public class Grades
     @XmlElement(name="link")
     @XmlElementWrapper(name = "links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    List<Link> links;
+    public List<Link> links;
 
     private ArrayList<Grade> grades = new ArrayList<Grade>();
 
@@ -50,13 +50,4 @@ public class Grades
         grades.remove(grade);
     }
 
-    public List<Link> getLinks()
-    {
-        return links;
-    }
-
-    public void setLinks(List<Link> links)
-    {
-        this.links = links;
-    }
 }

@@ -22,8 +22,8 @@ import java.util.List;
 public class Students
 {
     @InjectLinks({
-            @InjectLink(resource = StudentsDataResource.class, rel = "self"),
-            @InjectLink(resource = SubjectsDataResource.class, rel = "subjects"),
+            @InjectLink(resource = StudentsDataResource.class, rel = "self", style =  InjectLink.Style.ABSOLUTE),
+            @InjectLink(resource = SubjectsDataResource.class, rel = "subjects", style =  InjectLink.Style.ABSOLUTE),
     })
     @XmlElement(name="link")
     @XmlElementWrapper(name = "links")

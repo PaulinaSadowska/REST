@@ -6,7 +6,11 @@ import server.StudentsDataResource;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
@@ -17,8 +21,9 @@ public class Student
 {
         @InjectLink(resource = StudentsDataResource.class, method="getStudent",
                 bindings ={@Binding(name = "studentId", value = "${instance.id}")}, style =  InjectLink.Style.ABSOLUTE)
-        //TODO - repair so it shows correctly in xml
-        private Link view; //will hold the link to view account details
+        @XmlElement(name="view")
+        @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+        Link view; //will hold the link to view account details
 
         private int id;
 
@@ -80,16 +85,6 @@ public class Student
         public void setBirthDate(SimpleDate birthDate)
         {
                 this.birthDate = birthDate;
-        }
-
-        public Link getView()
-        {
-                return view;
-        }
-
-        public void setView(Link view)
-        {
-                this.view = view;
         }
 
 
