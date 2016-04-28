@@ -1,7 +1,14 @@
 package server.dataObjects;
 
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import server.SubjectsDataResource;
+
 import javax.validation.constraints.*;
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
@@ -10,6 +17,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="grades")
 public class Grade
 {
+    /*@InjectLink(resource = SubjectsDataResource.class, method="getStudentGrade",
+            bindings ={
+                    @Binding(name = "studentId", value = "${instance.studentId}"),
+            }, style =  InjectLink.Style.ABSOLUTE)
+    @XmlElement(name="gradeView")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    Link gradeView; //will hold the link to view account details*/
+
     @NotNull
     @DecimalMin("2.0")
     @DecimalMax("5.0")

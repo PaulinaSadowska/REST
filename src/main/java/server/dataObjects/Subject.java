@@ -1,7 +1,16 @@
 package server.dataObjects;
 
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+import server.StudentsDataResource;
+import server.SubjectsDataResource;
+
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -11,6 +20,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Subject
 {
+    @InjectLink(resource = SubjectsDataResource.class, method="getSubjects",
+            bindings ={
+                    @Binding(name = "subjectId", value = "${instance.id}")
+            }, style =  InjectLink.Style.ABSOLUTE)
+    @XmlElement(name="view")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    Link view; //will hold the link to view account details
+
     private int id;
 
     @NotNull
