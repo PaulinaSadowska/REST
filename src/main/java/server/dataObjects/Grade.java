@@ -2,6 +2,7 @@ package server.dataObjects;
 
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinkNoFollow;
 import server.SubjectsDataResource;
 
 import javax.validation.constraints.*;
@@ -17,13 +18,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name="grades")
 public class Grade
 {
-    /*@InjectLink(resource = SubjectsDataResource.class, method="getStudentGrade",
+    @InjectLink(resource = SubjectsDataResource.class, method="getStudentGrade",
             bindings ={
                     @Binding(name = "studentId", value = "${instance.studentId}"),
+                    @Binding(name = "subjectId", value = "${instance.subjectId}")
             }, style =  InjectLink.Style.ABSOLUTE)
     @XmlElement(name="gradeView")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    Link gradeView; //will hold the link to view account details*/
+    Link gradeView; //will hold the link to view account details
 
     @NotNull
     @DecimalMin("2.0")
@@ -36,12 +38,15 @@ public class Grade
     @NotNull
     private SimpleDate date;
 
+    private int subjectId;
+
     public Grade(){}
 
-    public Grade(double grade, SimpleDate date, int id){
+    public Grade(double grade, SimpleDate date, int id, int subjectId){
         this.grade = (int)grade;
         this.date = date;
         this.studentId = id;
+        this.subjectId = subjectId;
     }
 
     public double getGrade()
@@ -68,5 +73,15 @@ public class Grade
     public void setStudentId(int studentId)
     {
         this.studentId = studentId;
+    }
+
+    public int getSubjectId()
+    {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId)
+    {
+        this.subjectId = subjectId;
     }
 }

@@ -108,6 +108,7 @@ public class SubjectsDataResource
             {
                 UriBuilder ub = uriInfo.getAbsolutePathBuilder();
                 URI gradeUri = ub.path(grade.getStudentId()+"").build();
+                grade.setSubjectId(subjectId);
                 subject.addGrade(grade);
                 return Response.
                         created(gradeUri).
@@ -155,6 +156,7 @@ public class SubjectsDataResource
         Subject subjectToEdit = subjectsList.getSubject(subjectId);
         if (subjectToEdit != null)
         {
+            grade.setSubjectId(subjectId);
             if (subjectToEdit.editGrade(grade))
             {
                 return Response.status(Response.Status.OK).
