@@ -1,14 +1,18 @@
 package server.dataObjects;
 
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinkNoFollow;
+import org.mongodb.morphia.annotations.Id;
+import server.ObjectIdJaxbAdapter;
 import server.SubjectsDataResource;
 
 import javax.validation.constraints.*;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
@@ -26,6 +30,11 @@ public class Grade
     @XmlElement(name="gradeView")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     Link gradeView; //will hold the link to view account details
+
+    @Id
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId id;
+
 
     @NotNull
     @DecimalMin("2.0")
@@ -83,5 +92,16 @@ public class Grade
     public void setSubjectId(int subjectId)
     {
         this.subjectId = subjectId;
+    }
+
+    @XmlTransient
+    public ObjectId getId()
+    {
+        return id;
+    }
+
+    public void setId(ObjectId id)
+    {
+        this.id = id;
     }
 }

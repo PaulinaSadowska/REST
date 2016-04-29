@@ -5,6 +5,8 @@ import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
+import server.ObjectIdJaxbAdapter;
 import server.StudentsDataResource;
 import server.SubjectsDataResource;
 
@@ -12,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -33,6 +36,7 @@ public class Subject
     private int subjectId;
 
     @Id
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
 
     @NotNull
@@ -136,5 +140,16 @@ public class Subject
     public void setSubjectId(int subjectId)
     {
         this.subjectId = subjectId;
+    }
+
+    @XmlTransient
+    public ObjectId getId()
+    {
+        return id;
+    }
+
+    public void setId(ObjectId id)
+    {
+        this.id = id;
     }
 }

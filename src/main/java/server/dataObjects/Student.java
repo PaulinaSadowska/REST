@@ -3,16 +3,15 @@ package server.dataObjects;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import server.ObjectIdJaxbAdapter;
 import server.StudentsDataResource;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
@@ -23,76 +22,92 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Entity
 public class Student
 {
-        @InjectLink(resource = StudentsDataResource.class, method="getStudent",
-                bindings ={@Binding(name = "studentId", value = "${instance.studentId}")}, style =  InjectLink.Style.ABSOLUTE)
-        @XmlElement(name="view")
-        @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-        Link view; //will hold the link to view account details
+    @InjectLink(resource = StudentsDataResource.class, method = "getStudent",
+            bindings = {@Binding(name = "studentId", value = "${instance.studentId}")}, style = InjectLink.Style.ABSOLUTE)
+    @XmlElement(name = "view")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    Link view; //will hold the link to view account details
 
-        private int studentId;
+    @XmlTransient
+    private int studentId;
 
-        @Id
-        private ObjectId id;
+    @Id
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId id;
 
-        @NotNull
-        private String name;
+    @NotNull
+    private String name;
 
-        @NotNull
-        private String surname;
+    @NotNull
+    private String surname;
 
-        @NotNull
-        private SimpleDate birthDate;
+    @NotNull
+    @Embedded
+    private SimpleDate birthDate;
 
-        //Introducing the dummy constructor
-        public Student() {
-        }
+    //Introducing the dummy constructor
+    public Student()
+    {
+    }
 
-        public Student(int id, String name, String surname, SimpleDate birthDate){
-                this.studentId = id;
-                this.name = name;
-                this.surname = surname;
-                this.birthDate = birthDate;
-        }
+    public Student(int id, String name, String surname, SimpleDate birthDate)
+    {
+        this.studentId = id;
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+    }
 
-        public String getName()
-        {
-                return name;
-        }
+    public String getName()
+    {
+        return name;
+    }
 
-        public String getSurname()
-        {
-                return surname;
-        }
+    public String getSurname()
+    {
+        return surname;
+    }
 
-        public SimpleDate getBirthDate()
-        {
-                return birthDate;
-        }
-
-
-        public void setName(String name)
-        {
-                this.name = name;
-        }
-
-        public void setSurname(String surname)
-        {
-                this.surname = surname;
-        }
-
-        public void setBirthDate(SimpleDate birthDate)
-        {
-                this.birthDate = birthDate;
-        }
+    public SimpleDate getBirthDate()
+    {
+        return birthDate;
+    }
 
 
-        public int getStudentId()
-        {
-                return studentId;
-        }
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-        public void setStudentId(int studentId)
-        {
-                this.studentId = studentId;
-        }
+    public void setSurname(String surname)
+    {
+        this.surname = surname;
+    }
+
+    public void setBirthDate(SimpleDate birthDate)
+    {
+        this.birthDate = birthDate;
+    }
+
+
+    public int getStudentId()
+    {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId)
+    {
+        this.studentId = studentId;
+    }
+
+    @XmlTransient
+    public ObjectId getId()
+    {
+        return id;
+    }
+
+    public void setId(ObjectId id)
+    {
+        this.id = id;
+    }
 }
