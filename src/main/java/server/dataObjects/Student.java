@@ -1,7 +1,10 @@
 package server.dataObjects;
 
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 import server.StudentsDataResource;
 
 import javax.validation.constraints.NotNull;
@@ -17,15 +20,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 //posiada numer indeksu (unikalny identyfikator), imię, nazwisko, dataurodzenia (informacje nie mogą być puste)
 @XmlRootElement
+@Entity
 public class Student
 {
         @InjectLink(resource = StudentsDataResource.class, method="getStudent",
-                bindings ={@Binding(name = "studentId", value = "${instance.id}")}, style =  InjectLink.Style.ABSOLUTE)
+                bindings ={@Binding(name = "studentId", value = "${instance.studentId}")}, style =  InjectLink.Style.ABSOLUTE)
         @XmlElement(name="view")
         @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
         Link view; //will hold the link to view account details
 
-        private int id;
+        private int studentId;
+
+        @Id
+        private ObjectId id;
 
         @NotNull
         private String name;
@@ -41,15 +48,10 @@ public class Student
         }
 
         public Student(int id, String name, String surname, SimpleDate birthDate){
-                this.id = id;
+                this.studentId = id;
                 this.name = name;
                 this.surname = surname;
                 this.birthDate = birthDate;
-        }
-
-        public int getId()
-        {
-                return id;
         }
 
         public String getName()
@@ -67,10 +69,6 @@ public class Student
                 return birthDate;
         }
 
-        public void setId(int id)
-        {
-                this.id = id;
-        }
 
         public void setName(String name)
         {
@@ -88,4 +86,13 @@ public class Student
         }
 
 
+        public int getStudentId()
+        {
+                return studentId;
+        }
+
+        public void setStudentId(int studentId)
+        {
+                this.studentId = studentId;
+        }
 }

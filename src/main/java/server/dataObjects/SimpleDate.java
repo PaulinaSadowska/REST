@@ -1,5 +1,7 @@
 package server.dataObjects;
 
+import org.mongodb.morphia.annotations.Embedded;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -9,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by Paulina Sadowska on 21.04.2016.
  */
 @XmlRootElement
+@Embedded
 public class SimpleDate
 {
     @NotNull

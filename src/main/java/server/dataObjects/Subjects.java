@@ -39,14 +39,14 @@ public class Subjects
     }
 
     public int getAvailableId(){
-        int id = subjectsList.get(subjectsList.size()-1).getId();
+        int id = subjectsList.get(subjectsList.size()-1).getSubjectId();
         return ++id;
     }
 
 
     public Subject getSubject(int subjectId){
         for(Subject s: subjectsList){
-            if(s.getId() == subjectId){
+            if(s.getSubjectId() == subjectId){
                 return s;
             }
         }

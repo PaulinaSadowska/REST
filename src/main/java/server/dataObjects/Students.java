@@ -41,13 +41,13 @@ public class Students
     }
 
     public int getAvailableStudentId(){
-        int i = studentsList.get(studentsList.size()-1).getId();
+        int i = studentsList.get(studentsList.size()-1).getStudentId();
         return ++i;
     }
 
     public Student getStudent(int studentId){
         for(Student s: studentsList){
-            if(s.getId()==studentId){
+            if(s.getStudentId()==studentId){
                 return s;
             }
         }
@@ -58,7 +58,7 @@ public class Students
     {
         for (int i = 0; i < studentsList.size(); i++)
         {
-            if(studentsList.get(i).getId()==student.getId()){
+            if(studentsList.get(i).getStudentId()==student.getStudentId()){
                 studentsList.remove(i);
                 studentsList.add(i, student);
                 return;
@@ -69,7 +69,7 @@ public class Students
     public void deleteStudent(int studentId)
     {
         for(Student s: studentsList){
-            if(s.getId()==studentId){
+            if(s.getStudentId()==studentId){
                 studentsList.remove(s);
                 return;
             }

@@ -1,8 +1,10 @@
 package server.dataObjects;
 
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Id;
 import server.StudentsDataResource;
 import server.SubjectsDataResource;
 
@@ -22,13 +24,16 @@ public class Subject
 {
     @InjectLink(resource = SubjectsDataResource.class, method="getSubjects",
             bindings ={
-                    @Binding(name = "subjectId", value = "${instance.id}")
+                    @Binding(name = "subjectId", value = "${instance.subjectId}")
             }, style =  InjectLink.Style.ABSOLUTE)
     @XmlElement(name="view")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     Link view; //will hold the link to view account details
 
-    private int id;
+    private int subjectId;
+
+    @Id
+    private ObjectId id;
 
     @NotNull
     private String name;
@@ -42,9 +47,9 @@ public class Subject
     {
     }
 
-    public Subject(int id, String name, String teacher)
+    public Subject(int subjectId, String name, String teacher)
     {
-        this.id = id;
+        this.subjectId = subjectId;
         this.name = name;
         this.teacher = teacher;
         grades = new Grades();
@@ -123,13 +128,13 @@ public class Subject
         return false;
     }
 
-    public int getId()
+    public int getSubjectId()
     {
-        return id;
+        return subjectId;
     }
 
-    public void setId(int id)
+    public void setSubjectId(int subjectId)
     {
-        this.id = id;
+        this.subjectId = subjectId;
     }
 }

@@ -52,10 +52,10 @@ public class StudentsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addStudent(@NotNull @Valid Student student) throws URISyntaxException
     {
-        if(studentsList.getStudent(student.getId())==null)
+        if(studentsList.getStudent(student.getStudentId())==null)
         {
             int id = studentsList.getAvailableStudentId();
-            student.setId(id);
+            student.setStudentId(id);
             studentsList.addStudent(student);
             UriBuilder ub = uriInfo.getAbsolutePathBuilder();
             URI userUri = ub.path(id+"").build();
@@ -75,7 +75,7 @@ public class StudentsDataResource
     @PUT
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response editStudent(Student student){
-        if(studentsList.getStudent(student.getId())!=null)
+        if(studentsList.getStudent(student.getStudentId())!=null)
         {
             studentsList.editStudent(student);
             return Response.status(Response.Status.OK).

@@ -76,10 +76,10 @@ public class SubjectsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addSubject(Subject subject)
     {
-        if (subjectsList.getSubject(subject.getId()) == null)
+        if (subjectsList.getSubject(subject.getSubjectId()) == null)
         {
             int id = subjectsList.getAvailableId();
-            subject.setId(id);
+            subject.setSubjectId(id);
             subjectsList.addSubject(subject);
             UriBuilder ub = uriInfo.getAbsolutePathBuilder();
             URI subjectUri = ub.path(id+"").build();
@@ -132,7 +132,7 @@ public class SubjectsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response editSubject(Subject subject)
     {
-        Subject subjectToEdit = subjectsList.getSubject(subject.getId());
+        Subject subjectToEdit = subjectsList.getSubject(subject.getSubjectId());
         if (subjectToEdit != null)
         {
             subjectsList.editSubject(subjectToEdit, subject);
