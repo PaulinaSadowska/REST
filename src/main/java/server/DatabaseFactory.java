@@ -1,16 +1,11 @@
 package server;
 
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 import server.dataObjects.*;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,15 +14,15 @@ import java.util.List;
 public class DatabaseFactory
 {
     public static final String DATABASE_NAME = "RESTDatabase";
+    public static final String DATABASE_ADDRESS = "localhost";
+    public static final int DATABASE_PORT = 8004;
 
     public static void initMongoDB(){
-        MongoClient mongoClient = new MongoClient("localhost", 8004);
-        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoClient mongoClient = new MongoClient(DATABASE_ADDRESS, DATABASE_PORT);
 
         Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(SimpleDate.class);
-        morphia.map(Subject.class).map(Grade.class);
-        Datastore datastore = morphia.createDatastore(mongoClient, "db");
+        morphia.mapPackage("server.dataObjects");
+        Datastore datastore = morphia.createDatastore(mongoClient, DATABASE_NAME);
         datastore.ensureIndexes();
 
         //resetStudentsRecords(datastore);
