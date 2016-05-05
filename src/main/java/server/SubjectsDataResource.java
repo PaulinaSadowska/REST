@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -52,7 +53,7 @@ public class SubjectsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getGrades(@PathParam("subjectId") int subjectId)
     {
-        Grades result = subjectsList.getGrades(subjectId);
+        ArrayList<Grade> result = subjectsList.getGrades(subjectId);
         if (result != null)
             return Response.ok(result).build();
 

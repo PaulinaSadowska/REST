@@ -2,6 +2,7 @@ package server.dataObjects;
 
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Reference;
 import server.StudentsDataResource;
 import server.SubjectsDataResource;
 

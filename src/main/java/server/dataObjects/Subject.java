@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
 import server.ObjectIdJaxbAdapter;
@@ -16,6 +17,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
 
 
 /**
@@ -45,7 +47,8 @@ public class Subject
     @NotNull
     private String teacher;
 
-    private Grades grades;
+    @Embedded
+    public ArrayList<Grade> grades;
 
     public Subject()
     {
@@ -56,7 +59,7 @@ public class Subject
         this.subjectId = subjectId;
         this.name = name;
         this.teacher = teacher;
-        grades = new Grades();
+        grades = new ArrayList<Grade>();
     }
 
     public String getName()
@@ -84,19 +87,19 @@ public class Subject
         grades.add(grade);
     }
 
-    public Grades getGrades()
+    public ArrayList<Grade> getGrades()
     {
         return grades;
     }
 
-    public void setGrades(Grades grades)
+    public void setGrades(ArrayList<Grade> grades)
     {
         this.grades = grades;
     }
 
     public Grade getGrade(int studentId)
     {
-        for (Grade g : grades.getGrades())
+        for (Grade g : grades)
         {
             if (g.getStudentId() == studentId)
             {
@@ -109,7 +112,7 @@ public class Subject
 
     public boolean editGrade(Grade grade)
     {
-        for (Grade g : grades.getGrades())
+        for (Grade g : grades)
         {
             if (g.getStudentId() == grade.getStudentId())
             {

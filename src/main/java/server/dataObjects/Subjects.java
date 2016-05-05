@@ -60,7 +60,7 @@ public class Subjects
     }
 
 
-    public Grades getGrades(int subjectId)
+    public ArrayList<Grade> getGrades(int subjectId)
     {
         Subject subject = getSubject(subjectId);
         if(subject!=null)

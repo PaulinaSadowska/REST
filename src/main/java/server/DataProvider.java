@@ -37,13 +37,13 @@ public class DataProvider
     private void initSubjectsData()
     {
         Subject subject1 = new Subject(1, "Czarna magia", "Dumbledore");
-        subject1.addGrade(new Grade(2.0, new SimpleDate(2016, 3, 4), 1, 1));
-        subject1.addGrade(new Grade(4.0, new SimpleDate(2016, 4, 1), 2, 1));
+        subject1.addGrade(new Grade(2.0, new SimpleDate(2016, 3, 4), 1, 1, "000000000000000000000001"));
+        subject1.addGrade(new Grade(4.0, new SimpleDate(2016, 4, 1), 2, 1, "666f6f2d6261722d71757571"));
         subjectsList.addSubject(subject1);
 
         Subject subject2 = new Subject(2, "Cokolwiek", "Ktokolwiek");
-        subject2.addGrade(new Grade(3.0, new SimpleDate(2016, 4, 6), 3, 2));
-        subject2.addGrade(new Grade(5.0, new SimpleDate(2016, 4, 6), 1, 2));
+        subject2.addGrade(new Grade(3.0, new SimpleDate(2016, 4, 6), 3, 2, "666f6f2d6261722d71757575"));
+        subject2.addGrade(new Grade(5.0, new SimpleDate(2016, 4, 6), 1, 2, "666f6f2d6261722d71757570"));
         subjectsList.addSubject(subject2);
     }
 
