@@ -38,6 +38,11 @@ public class Students
     {
     }
 
+    public Students(List<Student> studentsList)
+    {
+        this.studentsList = studentsList;
+    }
+
     public void addStudent(Student student){
         studentsList.add(student);
     }

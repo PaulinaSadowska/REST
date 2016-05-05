@@ -13,16 +13,39 @@ import java.util.List;
  */
 public class DatabaseFactory
 {
-    public static final String DATABASE_NAME = "RESTDatabase";
-    public static final String DATABASE_ADDRESS = "localhost";
-    public static final int DATABASE_PORT = 8004;
 
-    public static void initMongoDB(){
+    private static DatabaseFactory databaseFactory;
+    private Datastore datastore;
+
+    public static DatabaseFactory getInstance( ) {
+        if(databaseFactory==null)
+            databaseFactory = new DatabaseFactory();
+
+        return databaseFactory;
+    }
+
+    private static final String DATABASE_NAME = "RESTDatabase";
+    private static final String DATABASE_ADDRESS = "localhost";
+    private static final int DATABASE_PORT = 8004;
+
+    private DatabaseFactory(){
+        initMongoDB();
+    }
+
+    public Datastore getDatastore(){
+        return datastore;
+    }
+
+    private void initMongoDB(){
         MongoClient mongoClient = new MongoClient(DATABASE_ADDRESS, DATABASE_PORT);
 
-        Morphia morphia = new Morphia();
+        final Morphia morphia = new Morphia();
+        // tell Morphia where to find your classes
+        // can be called multiple times with different packages or classes
         morphia.mapPackage("server.dataObjects");
-        Datastore datastore = morphia.createDatastore(mongoClient, DATABASE_NAME);
+
+        // create the Datastore connecting to the default port on the local host
+        datastore = morphia.createDatastore(mongoClient, DATABASE_NAME);
         datastore.ensureIndexes();
 
         //resetStudentsRecords(datastore);

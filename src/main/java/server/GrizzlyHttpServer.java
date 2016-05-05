@@ -16,12 +16,10 @@ public class GrizzlyHttpServer
 
     public static void main(String[] args) throws Exception
     {
-        DatabaseFactory.initMongoDB();
-       /* URI baseUri = UriBuilder.fromUri("http://localhost/").port(8000).build();
+        URI baseUri = UriBuilder.fromUri("http://localhost/").port(8000).build();
         ResourceConfig config = new ResourceConfig(StudentsDataResource.class, SubjectsDataResource.class);
         config.packages("org.glassfish.jersey.examples.linking", "com.fasterxml.jackson.jaxrs").
                 register(DeclarativeLinkingFeature.class);
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);*/
-
+        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
     }
 }
