@@ -2,6 +2,8 @@ package server;
 
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Query;
 import server.dataObjects.*;
 
 import javax.validation.Valid;
@@ -11,6 +13,7 @@ import javax.ws.rs.core.*;
 import java.lang.reflect.Array;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paulina Sadowska on 21.04.2016.
@@ -18,14 +21,15 @@ import java.util.ArrayList;
 @Path("subjects")
 public class SubjectsDataResource
 {
-    private Subjects subjectsList = new Subjects();
+    private Datastore datastore;
+    private int availableSubjectId = 0;
 
     @Context
     UriInfo uriInfo;
 
     public SubjectsDataResource()
     {
-        subjectsList = DataProvider.getInstance().getSubjectsList();
+        datastore = DatabaseFactory.getInstance().getDatastore();
     }
 
 
@@ -33,6 +37,7 @@ public class SubjectsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getAllSubjects()
     {
+        List<Subject> subjectsList = datastore.find(Subject.class).asList();
         return Response.ok(subjectsList).build();
     }
 
@@ -41,8 +46,8 @@ public class SubjectsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getSubjects(@PathParam("subjectId") int subjectId)
     {
-        Subject result = subjectsList.getSubject(subjectId);
-        if (result != null)
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
+        if(result!=null)
             return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
@@ -53,9 +58,9 @@ public class SubjectsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getGrades(@PathParam("subjectId") int subjectId)
     {
-        ArrayList<Grade> result = subjectsList.getGrades(subjectId);
-        if (result != null)
-            return Response.ok(result).build();
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
+        if(result!=null)
+            return Response.ok(result.get(0).getGrades()).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
     }
@@ -65,9 +70,9 @@ public class SubjectsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getStudentGrade(@PathParam("subjectId") int subjectId, @PathParam("studentId") int studentId)
     {
-        Grade result = subjectsList.getStudentGrade(subjectId, studentId);
-        if (result != null)
-            return Response.ok(result).build();
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
+        if(result!=null)
+            return Response.ok(result.get(0).getGrade(studentId)).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
     }
@@ -77,11 +82,12 @@ public class SubjectsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addSubject(Subject subject)
     {
-        if (subjectsList.getSubject(subject.getSubjectId()) == null)
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subject.getSubjectId()).asList();
+        if (result.size() == 0)
         {
-            int id = subjectsList.getAvailableId();
+            int id = getAvailableSubjectId();
             subject.setSubjectId(id);
-            subjectsList.addSubject(subject);
+            datastore.save(subject);
             UriBuilder ub = uriInfo.getAbsolutePathBuilder();
             URI subjectUri = ub.path(id+"").build();
             return Response.
@@ -102,15 +108,17 @@ public class SubjectsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addGrade(@PathParam("subjectId") int subjectId, @NotNull @Valid Grade grade)
     {
-        Subject subject = subjectsList.getSubject(subjectId);
-        if (subject != null)
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
+        if (result.size() > 0)
         {
+            Subject subject = result.get(0);
             if (subject.getGrade(grade.getStudentId()) == null)
             {
                 UriBuilder ub = uriInfo.getAbsolutePathBuilder();
                 URI gradeUri = ub.path(grade.getStudentId()+"").build();
                 grade.setSubjectId(subjectId);
                 subject.addGrade(grade);
+                datastore.save(subject);
                 return Response.
                         created(gradeUri).
                         status(Response.Status.CREATED).
@@ -133,10 +141,12 @@ public class SubjectsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response editSubject(Subject subject)
     {
-        Subject subjectToEdit = subjectsList.getSubject(subject.getSubjectId());
-        if (subjectToEdit != null)
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subject.getSubjectId()).asList();
+        if (result.size() > 0)
         {
-            subjectsList.editSubject(subjectToEdit, subject);
+            Subject subjectToEdit = result.get(0);
+            subject.setId(subjectToEdit.getId());
+            datastore.save(subject);
             return Response.status(Response.Status.OK).
                     entity("subject edited successfully").
                     type("text/plain").
@@ -154,16 +164,21 @@ public class SubjectsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response editGrade(@PathParam("subjectId") int subjectId, Grade grade)
     {
-        Subject subjectToEdit = subjectsList.getSubject(subjectId);
-        if (subjectToEdit != null)
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
+        if (result.size() > 0)
         {
-            grade.setSubjectId(subjectId);
-            if (subjectToEdit.editGrade(grade))
+            Subject subject = result.get(0);
+            if(subject.getGrades()!=null)
             {
-                return Response.status(Response.Status.OK).
-                        entity("grade edited successfully").
-                        type("text/plain").
-                        build();
+                grade.setSubjectId(subjectId);
+                if (subject.editGrade(grade))
+                {
+                    datastore.save(subject);
+                    return Response.status(Response.Status.OK).
+                            entity("grade edited successfully").
+                            type("text/plain").
+                            build();
+                }
             }
             return Response.status(Response.Status.NOT_FOUND).
                     entity("grade don't exist").
@@ -180,9 +195,12 @@ public class SubjectsDataResource
     @Path("{subjectId}")
     public Response deleteSubject(@PathParam("subjectId") int subjectId)
     {
-        if (subjectsList.getSubject(subjectId) != null)
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
+        if (result.size() > 0)
         {
-            subjectsList.deleteSubject(subjectId);
+            final Query<Subject> subjectToDeleteQuery = datastore.createQuery(Subject.class)
+                    .filter("subjectId ==", subjectId);
+            datastore.delete(subjectToDeleteQuery);
             return Response.status(Response.Status.OK).
                     entity("subject " + subjectId + " deleted successfully").
                     type("text/plain").
@@ -198,15 +216,20 @@ public class SubjectsDataResource
     @Path("{subjectId}/grades/{studentId}")
     public Response deleteGrade(@PathParam("subjectId") int subjectId, @PathParam("studentId") int studentId)
     {
-        Subject subject = subjectsList.getSubject(subjectId);
-        if (subject != null)
+        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
+        if (result.size() > 0)
         {
-            if (subject.deleteGrade(studentId))
+            Subject subject = result.get(0);
+            if(subject.getGrades()!=null)
             {
-                return Response.status(Response.Status.OK).
-                        entity("grade of student number " + studentId + " deleted successfully").
-                        type("text/plain").
-                        build();
+                if (subject.deleteGrade(studentId))
+                {
+                    datastore.save(subject);
+                    return Response.status(Response.Status.OK).
+                            entity("grade of student number " + studentId + " deleted successfully").
+                            type("text/plain").
+                            build();
+                }
             }
             return Response.status(Response.Status.NOT_FOUND).
                     entity("grade don't exists").
@@ -219,4 +242,16 @@ public class SubjectsDataResource
                 build();
     }
 
+
+    public int getAvailableSubjectId()
+    {
+        List<Subject> result = new ArrayList<Subject>();
+        result.add(new Subject());
+        while(availableSubjectId<1 || result.size()>0)
+        {
+            availableSubjectId++;
+            result = datastore.find(Subject.class).field("subjectId").equal(availableSubjectId).asList();
+        }
+        return availableSubjectId;
+    }
 }

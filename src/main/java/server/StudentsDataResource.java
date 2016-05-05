@@ -86,9 +86,8 @@ public class StudentsDataResource
         List<Student> result = datastore.find(Student.class).field("studentId").equal(student.getStudentId()).asList();
         if(result.size() > 0)
         {
-            final Query<Student> studentToReplaceQuery = datastore.createQuery(Student.class)
-                    .filter("studentId ==", student.getStudentId());
-            datastore.delete(studentToReplaceQuery);
+            Student studentToEdit = result.get(0);
+            student.setId(studentToEdit.getId());
             datastore.save(student);
             return Response.status(Response.Status.OK).
                     entity("student data edited successfully").
@@ -125,6 +124,7 @@ public class StudentsDataResource
     public int getAvailableStudentId()
     {
         List<Student> result = new ArrayList<Student>();
+        result.add(new Student());
         while(availableStudentId<1 || result.size()>0)
         {
             availableStudentId++;
