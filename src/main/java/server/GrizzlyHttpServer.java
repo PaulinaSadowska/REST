@@ -1,6 +1,5 @@
 package server;
 
-import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -20,6 +19,6 @@ public class GrizzlyHttpServer
         ResourceConfig config = new ResourceConfig(StudentsDataResource.class, SubjectsDataResource.class);
         config.packages("org.glassfish.jersey.examples.linking", "com.fasterxml.jackson.jaxrs").
                 register(DeclarativeLinkingFeature.class);
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
+        GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
     }
 }

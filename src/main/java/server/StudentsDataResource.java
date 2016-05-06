@@ -3,8 +3,7 @@ package server;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
-import server.dataObjects.Student;
-import server.dataObjects.Students;
+import server.dataObjects.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -105,6 +104,7 @@ public class StudentsDataResource
     public Response deleteStudent(@PathParam("studentId") int studentId){
 
         List<Student> result = datastore.find(Student.class).field("studentId").equal(studentId).asList();
+        deleteStudentGrades(studentId);
         if(result.size() > 0)
         {
             final Query<Student> studentToDeleteQuery = datastore.createQuery(Student.class)
@@ -119,6 +119,15 @@ public class StudentsDataResource
                 entity("student don't exists").
                 type("text/plain").
                 build();
+    }
+
+    private void deleteStudentGrades(int studentId)
+    {
+        List<Subject> result = datastore.find(Subject.class).asList();
+        for(Subject s: result){
+            s.deleteGrade(studentId);
+            datastore.save(s);
+        }
     }
 
     public int getAvailableStudentId()
