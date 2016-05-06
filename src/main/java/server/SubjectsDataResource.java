@@ -117,6 +117,8 @@ public class SubjectsDataResource
                 UriBuilder ub = uriInfo.getAbsolutePathBuilder();
                 URI gradeUri = ub.path(grade.getStudentId()+"").build();
                 grade.setSubjectId(subjectId);
+                Student student = datastore.find(Student.class).field("studentId").equal(grade.getStudentId()).asList().get(0);
+                grade.setStudent(student);
                 subject.addGrade(grade);
                 datastore.save(subject);
                 return Response.
@@ -171,6 +173,8 @@ public class SubjectsDataResource
             if(subject.getGrades()!=null)
             {
                 grade.setSubjectId(subjectId);
+                Student student = datastore.find(Student.class).field("studentId").equal(grade.getStudentId()).asList().get(0);
+                grade.setStudent(student);
                 if (subject.editGrade(grade))
                 {
                     datastore.save(subject);

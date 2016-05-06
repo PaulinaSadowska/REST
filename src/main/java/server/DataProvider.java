@@ -22,8 +22,7 @@ public class DataProvider
     private Subjects subjectsList = new Subjects();
 
     private DataProvider(){
-        initStudentsData();
-        initSubjectsData();
+        initData();
     }
 
     public Students getStudentsList(){
@@ -34,22 +33,23 @@ public class DataProvider
         return subjectsList;
     }
 
-    private void initSubjectsData()
+    private void initData()
     {
+        Student student1 = new Student(1, "Kasia", "Kowalska", new SimpleDate(1990, 2, 1));
+        Student student2 = new Student(2, "Pawel", "Kkkk", new SimpleDate(1993, 6, 7));
+        Student student3 = new Student(3, "Rafał", "Arasz", new SimpleDate(1991, 12, 16));
+        studentsList.addStudent(student1);
+        studentsList.addStudent(student2);
+        studentsList.addStudent(student3);
+
         Subject subject1 = new Subject(1, "Czarna magia", "Dumbledore");
-        subject1.addGrade(new Grade(2.0, new SimpleDate(2016, 3, 4), 1, 1, "000000000000000000000001"));
-        subject1.addGrade(new Grade(4.0, new SimpleDate(2016, 4, 1), 2, 1, "666f6f2d6261722d71757571"));
+        subject1.addGrade(new Grade(2.0, new SimpleDate(2016, 3, 4), 1, student1));
+        subject1.addGrade(new Grade(4.0, new SimpleDate(2016, 4, 1), 1, student2));
         subjectsList.addSubject(subject1);
 
         Subject subject2 = new Subject(2, "Cokolwiek", "Ktokolwiek");
-        subject2.addGrade(new Grade(3.0, new SimpleDate(2016, 4, 6), 3, 2, "666f6f2d6261722d71757575"));
-        subject2.addGrade(new Grade(5.0, new SimpleDate(2016, 4, 6), 1, 2, "666f6f2d6261722d71757570"));
+        subject2.addGrade(new Grade(3.0, new SimpleDate(2016, 4, 6), 2, student2));
+        subject2.addGrade(new Grade(5.0, new SimpleDate(2016, 4, 6), 2, student3));
         subjectsList.addSubject(subject2);
-    }
-
-    private void initStudentsData(){
-        studentsList.addStudent(new Student(1, "Kasia", "Kowalska", new SimpleDate(1990, 2, 1)));
-        studentsList.addStudent(new Student(2, "Pawel", "Kkkk", new SimpleDate(1993, 6, 7)));
-        studentsList.addStudent(new Student(3, "Rafał", "Arasz", new SimpleDate(1991, 12, 16)));
     }
 }

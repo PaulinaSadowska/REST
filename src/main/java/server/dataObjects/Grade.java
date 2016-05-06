@@ -5,6 +5,7 @@ import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 import server.ObjectIdJaxbAdapter;
 import server.SubjectsDataResource;
 
@@ -37,8 +38,11 @@ public class Grade
     @DecimalMax("5.0")
     private double grade;
 
-    @NotNull
-    private int studentId;
+    // @NotNull
+   // private int studentId;
+    @Reference
+    private Student student;
+
 
     @NotNull
     private SimpleDate date;
@@ -47,10 +51,11 @@ public class Grade
 
     public Grade(){}
 
-    public Grade(double grade, SimpleDate date, int studentId, int subjectId, String gradeId){
+    public Grade(double grade, SimpleDate date, int subjectId, Student student){
         this.grade = (int)grade;
         this.date = date;
-        this.studentId = studentId;
+       // this.studentId = studentId;
+        this.student = student;
         this.subjectId = subjectId;
     }
 
@@ -64,7 +69,7 @@ public class Grade
     }
     public int getStudentId()
     {
-        return studentId;
+        return student.getStudentId();
     }
 
     public void setDate(SimpleDate date)
@@ -75,10 +80,6 @@ public class Grade
     {
             this.grade = grade;
     }
-    public void setStudentId(int studentId)
-    {
-        this.studentId = studentId;
-    }
 
     public int getSubjectId()
     {
@@ -88,5 +89,15 @@ public class Grade
     public void setSubjectId(int subjectId)
     {
         this.subjectId = subjectId;
+    }
+
+    public Student getStudent()
+    {
+        return student;
+    }
+
+    public void setStudent(Student student)
+    {
+        this.student = student;
     }
 }
