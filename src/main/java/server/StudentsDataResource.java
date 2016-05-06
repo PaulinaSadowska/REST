@@ -12,6 +12,7 @@ import javax.ws.rs.core.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,7 +48,61 @@ public class StudentsDataResource
     public Response getStudent(@PathParam("studentId") int studentId)
     {
         List<Student> result = datastore.find(Student.class).field("studentId").equal(studentId).asList();
-        if(result!=null)
+        if(result.size()>0)
+            return Response.ok(result).build();
+
+        return Response.status(Response.Status.NOT_FOUND).entity("Not found").build();
+    }
+
+
+    @GET
+    @Path("getByName")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getByName(
+            @DefaultValue("") @QueryParam("name") String name,
+        @DefaultValue("") @QueryParam("surname") String surname)
+    {
+        if(surname.equals("") && !name.equals(""))
+        {
+            List<Student> result = datastore.find(Student.class).field("name").equal(name).asList();
+            if (result.size() > 0)
+                return Response.ok(result).build();
+        }
+        else if(!surname.equals("") && name.equals("")){
+            List<Student> result = datastore.find(Student.class).field("surname").equal(surname).asList();
+            if (result.size() > 0)
+                return Response.ok(result).build();
+        }
+        else if(!surname.equals("") && !name.equals("")){
+            List<Student> result = datastore.find(Student.class)
+                    .field("surname").equal(surname)
+                    .field("name").equal(name).asList();
+            if (result.size() > 0)
+                return Response.ok(result).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).entity("Not found").build();
+    }
+
+    @GET
+    @Path("getByBirthDate")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getByBirthDate(
+            @QueryParam("year") int year,
+            @QueryParam("month") int month,
+            @QueryParam("day") int day,
+            @DefaultValue("0") @QueryParam("when") int when)
+    {
+        List<Student> result = new ArrayList<Student>();
+        SimpleDate date = new SimpleDate(year, month, day);
+        if(when==0)
+             result = datastore.find(Student.class).field("birthDate").equal(date).asList();
+        else if(when>0)
+            result = datastore.find(Student.class).field("birthDate").lessThan(date).asList(); //TODO - fix
+        else if(when<0)
+            result = datastore.find(Student.class).field("birthDate").greaterThan(date).asList(); //TODO - fix
+
+        if (result.size() > 0)
             return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).entity("Not found").build();

@@ -78,6 +78,41 @@ public class SubjectsDataResource
     }
 
 
+    @GET
+    @Path("getSubjects")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getSubjectByTeacher( @DefaultValue("") @QueryParam("teacher") String teacherName)
+    {
+        List<Subject> result = datastore.find(Subject.class).field("teacher").equal(teacherName).asList();
+        if(result!=null)
+            return Response.ok(result).build();
+
+        return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
+    }
+
+    @GET
+    @Path("getGrades")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getGradesByValue( @DefaultValue("2.0") @QueryParam("grade") double grade,
+                                         @DefaultValue("0") @QueryParam("compare") int compare)
+    {
+        ArrayList<Grade> result = new ArrayList<Grade>();
+        for (Subject subject : datastore.find(Subject.class).asList())
+        {
+            for (Grade g : subject.getGrades())
+            {
+                if(compareGrade(g.getGrade(), grade, compare)){
+                    result.add(g);
+                }
+            }
+        }
+
+        if(result!=null)
+            return Response.ok(result).build();
+
+        return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
+    }
+
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addSubject(Subject subject)
@@ -257,5 +292,31 @@ public class SubjectsDataResource
             result = datastore.find(Subject.class).field("subjectId").equal(availableSubjectId).asList();
         }
         return availableSubjectId;
+    }
+
+    private boolean compareGrade(double grade, double searchedGrade, int compare)
+    {
+        if(compare==0)
+        {
+            if (grade == searchedGrade)
+            {
+                return true;
+            }
+        }
+        else if(compare<0)
+        {
+            if (grade < searchedGrade)
+            {
+                return true;
+            }
+        }
+        else if(compare>0)
+        {
+            if (grade > searchedGrade)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
