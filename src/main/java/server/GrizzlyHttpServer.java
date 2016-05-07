@@ -17,6 +17,7 @@ public class GrizzlyHttpServer
     {
         URI baseUri = UriBuilder.fromUri("http://localhost/").port(8000).build();
         ResourceConfig config = new ResourceConfig(StudentsDataResource.class, SubjectsDataResource.class);
+        config.register(DateParamConverterProvider.class);
         config.packages("org.glassfish.jersey.examples.linking", "com.fasterxml.jackson.jaxrs").
                 register(DeclarativeLinkingFeature.class);
         GrizzlyHttpServerFactory.createHttpServer(baseUri, config);

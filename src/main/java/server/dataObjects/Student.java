@@ -1,5 +1,6 @@
 package server.dataObjects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Date;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
@@ -41,16 +43,17 @@ public class Student
     @NotNull
     private String surname;
 
-    @NotNull
-    @Embedded
-    private SimpleDate birthDate;
+   // @NotNull
+    @JsonFormat(shape=JsonFormat.Shape.STRING,
+            pattern="yyyy-MM-dd", timezone="CET")
+    private Date birthDate;
 
     //Introducing the dummy constructor
     public Student()
     {
     }
 
-    public Student(int id, String name, String surname, SimpleDate birthDate)
+    public Student(int id, String name, String surname, Date birthDate)
     {
         this.studentId = id;
         this.name = name;
@@ -68,7 +71,7 @@ public class Student
         return surname;
     }
 
-    public SimpleDate getBirthDate()
+    public Date getBirthDate()
     {
         return birthDate;
     }
@@ -84,7 +87,7 @@ public class Student
         this.surname = surname;
     }
 
-    public void setBirthDate(SimpleDate birthDate)
+    public void setBirthDate(Date birthDate)
     {
         this.birthDate = birthDate;
     }

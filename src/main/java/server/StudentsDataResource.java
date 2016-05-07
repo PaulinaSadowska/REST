@@ -4,6 +4,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import server.dataObjects.*;
+import server.utils.DateUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -88,19 +89,17 @@ public class StudentsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getByBirthDate(
-            @QueryParam("year") int year,
-            @QueryParam("month") int month,
-            @QueryParam("day") int day,
-            @DefaultValue("0") @QueryParam("when") int when)
+            @QueryParam("birthDate") String birthDate,
+            @DefaultValue("0") @QueryParam("comparator") int comparator)
     {
         List<Student> result = new ArrayList<Student>();
-        SimpleDate date = new SimpleDate(year, month, day);
-        if(when==0)
+        Date date = DateUtils.getDate(birthDate);
+        if(comparator==0)
              result = datastore.find(Student.class).field("birthDate").equal(date).asList();
-        else if(when>0)
-            result = datastore.find(Student.class).field("birthDate").lessThan(date).asList(); //TODO - fix
-        else if(when<0)
-            result = datastore.find(Student.class).field("birthDate").greaterThan(date).asList(); //TODO - fix
+        else if(comparator<0)
+            result = datastore.find(Student.class).field("birthDate").lessThan(date).asList();
+        else if(comparator>0)
+            result = datastore.find(Student.class).field("birthDate").greaterThan(date).asList();
 
         if (result.size() > 0)
             return Response.ok(result).build();

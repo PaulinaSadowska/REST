@@ -1,6 +1,7 @@
 package server;
 
 import server.dataObjects.*;
+import server.utils.DateUtils;
 
 /**
  * Created by Paulina Sadowska on 21.04.2016.
@@ -35,9 +36,10 @@ public class DataProvider
 
     private void initData()
     {
-        Student student1 = new Student(1, "Kasia", "Kowalska", new SimpleDate(1990, 2, 1));
-        Student student2 = new Student(2, "Pawel", "Kkkk", new SimpleDate(1993, 6, 7));
-        Student student3 = new Student(3, "Rafał", "Arasz", new SimpleDate(1991, 12, 16));
+
+        Student student1 = new Student(1, "Kasia", "Kowalska", DateUtils.getDate(1993, 3, 1));
+        Student student2 = new Student(2, "Pawel", "Kkkk", DateUtils.getDate(1991, 8, 2));
+        Student student3 = new Student(3, "Rafał", "Arasz", DateUtils.getDate(1992, 12, 16));
         studentsList.addStudent(student1);
         studentsList.addStudent(student2);
         studentsList.addStudent(student3);
