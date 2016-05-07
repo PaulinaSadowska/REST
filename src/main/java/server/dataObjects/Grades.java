@@ -38,6 +38,10 @@ public class Grades
 
     public Grades(){ }
 
+    public Grades(ArrayList<Grade> grades){
+        this.grades = grades;
+    }
+
     public void setGrades(ArrayList<Grade> grades)
     {
         this.grades = grades;

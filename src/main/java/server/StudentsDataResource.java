@@ -38,8 +38,11 @@ public class StudentsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getAllStudents()
     {
-        List<Student> studentsList = datastore.find(Student.class).asList();
-        return Response.ok(studentsList).build();
+        Students result = new Students(datastore.find(Student.class).asList());
+        if(result.getStudentsList().size()>0)
+            return Response.ok(result).build();
+
+        return Response.status(Response.Status.NOT_FOUND).entity("Students list is empty").build();
     }
 
 
@@ -48,8 +51,8 @@ public class StudentsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getStudent(@PathParam("studentId") int studentId)
     {
-        List<Student> result = datastore.find(Student.class).field("studentId").equal(studentId).asList();
-        if(result.size()>0)
+        Students result = new Students(datastore.find(Student.class).field("studentId").equal(studentId).asList());
+        if(result.getStudentsListSize()>0)
             return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).entity("Not found").build();
@@ -95,11 +98,26 @@ public class StudentsDataResource
         List<Student> result = new ArrayList<Student>();
         Date date = DateUtils.getDate(birthDate);
         if(comparator==0)
-             result = datastore.find(Student.class).field("birthDate").equal(date).asList();
+        {
+            Date startDate = new Date(date.getYear(), date.getMonth(), date.getDay()+1);
+            startDate.setHours(0);
+            date.setHours(23);
+            Query<Student> query = datastore.find(Student.class);
+            query.and(
+                    query.criteria("birthDate").lessThan(date),
+                    query.criteria("birthDate").greaterThan(startDate));
+            result = query.asList();
+        }
         else if(comparator<0)
+        {
+            date.setHours(0);
             result = datastore.find(Student.class).field("birthDate").lessThan(date).asList();
+        }
         else if(comparator>0)
+        {
+            date.setHours(23);
             result = datastore.find(Student.class).field("birthDate").greaterThan(date).asList();
+        }
 
         if (result.size() > 0)
             return Response.ok(result).build();

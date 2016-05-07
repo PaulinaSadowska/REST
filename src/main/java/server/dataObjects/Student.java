@@ -43,7 +43,7 @@ public class Student
     @NotNull
     private String surname;
 
-   // @NotNull
+    @NotNull
     @JsonFormat(shape=JsonFormat.Shape.STRING,
             pattern="yyyy-MM-dd", timezone="CET")
     private Date birthDate;

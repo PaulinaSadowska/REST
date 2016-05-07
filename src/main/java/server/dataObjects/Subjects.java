@@ -28,10 +28,15 @@ public class Subjects
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     List<Link> links;
 
-    private ArrayList<Subject> subjectsList = new ArrayList<Subject>();
+    private List<Subject> subjectsList = new ArrayList<Subject>();
 
     public Subjects()
     {
+    }
+
+    public Subjects(List<Subject> subjectsList)
+    {
+        this.subjectsList = subjectsList;
     }
 
     public void addSubject(Subject subject){
@@ -60,11 +65,11 @@ public class Subjects
     }
 
 
-    public ArrayList<Grade> getGrades(int subjectId)
+    public Grades getGrades(int subjectId)
     {
         Subject subject = getSubject(subjectId);
         if(subject!=null)
-            return subject.getGrades();
+            return new Grades(subject.getGrades());
 
         return null;
 
@@ -81,13 +86,17 @@ public class Subjects
         subjectsList.remove(getSubject(subjectId));
     }
 
-    public ArrayList<Subject> getSubjectsList(){
+    public List<Subject> getSubjectsList(){
         return subjectsList;
     }
 
-    public void setSubjectsList(ArrayList<Subject> subjectsList)
+    public void setSubjectsList(List<Subject> subjectsList)
     {
         this.subjectsList = subjectsList;
     }
 
+    public int getSubjectsListSize()
+    {
+        return subjectsList.size();
+    }
 }

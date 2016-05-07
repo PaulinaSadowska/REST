@@ -101,4 +101,9 @@ public class Students
     {
         this.links = links;
     }
+
+    public int getStudentsListSize()
+    {
+        return studentsList.size();
+    }
 }

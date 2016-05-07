@@ -37,8 +37,11 @@ public class SubjectsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getAllSubjects()
     {
-        List<Subject> subjectsList = datastore.find(Subject.class).asList();
-        return Response.ok(subjectsList).build();
+        Subjects subjectsList = new Subjects(datastore.find(Subject.class).asList());
+        if(subjectsList.getSubjectsListSize()>0)
+            return Response.ok(subjectsList).build();
+
+        return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Subjects list is empty").build();
     }
 
     @GET
@@ -47,8 +50,8 @@ public class SubjectsDataResource
     public Response getSubjects(@PathParam("subjectId") int subjectId)
     {
         List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
-        if(result!=null)
-            return Response.ok(result).build();
+        if(result.size()>0)
+            return Response.ok(result.get(0)).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
     }
@@ -58,9 +61,9 @@ public class SubjectsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getGrades(@PathParam("subjectId") int subjectId)
     {
-        List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
-        if(result!=null)
-            return Response.ok(result.get(0).getGrades()).build();
+        Subjects result = new Subjects(datastore.find(Subject.class).field("subjectId").equal(subjectId).asList());
+        if(result.getSubjectsListSize()>0)
+            return Response.ok(result.getGrades(subjectId)).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
     }
@@ -79,7 +82,7 @@ public class SubjectsDataResource
 
 
     @GET
-    @Path("getSubjects")
+    @Path("getSubjectsByTeacher")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getSubjectByTeacher( @DefaultValue("") @QueryParam("teacher") String teacherName)
     {
