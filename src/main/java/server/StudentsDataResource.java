@@ -2,9 +2,7 @@ package server;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.UpdateOperations;
 import server.dataObjects.*;
-import server.utils.DateUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -13,6 +11,7 @@ import javax.ws.rs.core.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -92,31 +91,35 @@ public class StudentsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getByBirthDate(
-            @QueryParam("birthDate") String birthDate,
+            @QueryParam("date") Date date,
             @DefaultValue("0") @QueryParam("comparator") int comparator)
     {
         List<Student> result = new ArrayList<Student>();
-        Date date = DateUtils.getDate(birthDate);
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
         if(comparator==0)
         {
-            Date startDate = new Date(date.getYear(), date.getMonth(), date.getDay()+1);
-            startDate.setHours(0);
-            date.setHours(23);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            Date startDate=calendar.getTime();
+            calendar.set(Calendar.HOUR_OF_DAY, 23);
+            Date endDate = calendar.getTime();
             Query<Student> query = datastore.find(Student.class);
             query.and(
-                    query.criteria("birthDate").lessThan(date),
+                    query.criteria("birthDate").lessThan(endDate),
                     query.criteria("birthDate").greaterThan(startDate));
             result = query.asList();
         }
         else if(comparator<0)
         {
-            date.setHours(0);
-            result = datastore.find(Student.class).field("birthDate").lessThan(date).asList();
+            calendar.set(Calendar.HOUR_OF_DAY, 23);
+            Date endDate = calendar.getTime();
+            result = datastore.find(Student.class).field("birthDate").lessThan(endDate).asList();
         }
         else if(comparator>0)
         {
-            date.setHours(23);
-            result = datastore.find(Student.class).field("birthDate").greaterThan(date).asList();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            Date startDate=calendar.getTime();
+            result = datastore.find(Student.class).field("birthDate").greaterThan(startDate).asList();
         }
 
         if (result.size() > 0)

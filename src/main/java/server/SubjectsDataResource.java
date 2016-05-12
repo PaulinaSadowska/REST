@@ -110,7 +110,7 @@ public class SubjectsDataResource
             }
         }
 
-        if(result!=null)
+        if(result.size()>0)
             return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();

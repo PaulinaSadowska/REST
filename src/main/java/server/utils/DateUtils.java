@@ -14,12 +14,4 @@ public class DateUtils
         cal.set(year, month, day);
         return cal.getTime();
     }
-
-    public static Date getDate(String date){
-        String[] parts = date.split("-");
-        int year = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1])-1;
-        int day = Integer.parseInt(parts[2]);
-        return getDate(year, month, day);
-    }
 }
