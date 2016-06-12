@@ -38,6 +38,30 @@ public class SubjectsDataResource
     public Response getAllSubjects()
     {
         Subjects subjectsList = new Subjects(datastore.find(Subject.class).asList());
+
+        if(subjectsList.getSubjectsListSize()>0)
+            return Response.ok(subjectsList.getSubjectsList()).build();
+
+        return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Subjects list is empty").build();
+    }
+
+    @GET
+    @Path("search")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getQueriedSubjects(
+            @DefaultValue("") @QueryParam("subjectNameQuery") String subjectName,
+            @DefaultValue("") @QueryParam("teacherNameQuery") String teacherName)
+    {
+        Subjects subjectsList;
+        if(!subjectName.equals("")){
+            subjectsList =  new Subjects(datastore.find(Subject.class).field("subjectName").containsIgnoreCase(subjectName).asList());
+        }
+        else if (!teacherName.equals("")){
+            subjectsList = new Subjects(datastore.find(Subject.class).field("teacher").containsIgnoreCase(teacherName).asList());
+        }
+        else{
+            subjectsList = new Subjects(datastore.find(Subject.class).asList());
+        }
         if(subjectsList.getSubjectsListSize()>0)
             return Response.ok(subjectsList.getSubjectsList()).build();
 
