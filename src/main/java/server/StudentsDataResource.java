@@ -1,5 +1,6 @@
 package server;
 
+import com.sun.istack.internal.Nullable;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import server.dataObjects.*;
@@ -35,14 +36,30 @@ public class StudentsDataResource
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getAllStudents(
-            @DefaultValue("0") @QueryParam("studentIdQuery") int studentIdQuery,
-            @DefaultValue("") @QueryParam("firstNameQuery") String name,
-            @DefaultValue("") @QueryParam("lastNameQuery") String surname,
-            @QueryParam("birthDateQuery") Date birthDate)
-          //  @DefaultValue("0") @QueryParam("comparatorQuery") int comparator)
+    public Response getAllStudents()
     {
         Students result = new Students(datastore.find(Student.class).asList());
+        if(result.getStudentsList().size()>0)
+            return Response.ok(result.getStudentsList()).build();
+
+        return Response.status(Response.Status.NOT_FOUND).entity("Students list is empty").build();
+    }
+
+    @GET
+    @Path("search")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getQueryStudents(
+            @DefaultValue("") @QueryParam("studentIdQuery") String studentIdQuery,
+            @DefaultValue("") @QueryParam("firstNameQuery") String name,
+            @DefaultValue("") @QueryParam("lastNameQuery") String surname,
+            @DefaultValue("") @QueryParam("birthDateQuery") String birthDate)
+    {
+        Students result = new Students(datastore.find(Student.class).
+                field("firstName").containsIgnoreCase(name).
+                field("surname").containsIgnoreCase(surname).
+                field("studentIdString").containsIgnoreCase(studentIdQuery)
+                .field("birthDate").containsIgnoreCase(birthDate)
+                .asList());
         if(result.getStudentsList().size()>0)
             return Response.ok(result.getStudentsList()).build();
 
@@ -68,23 +85,23 @@ public class StudentsDataResource
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getByName(
             @DefaultValue("") @QueryParam("firstNameQuery") String name,
-        @DefaultValue("") @QueryParam("lastNameQuery") String surname)
+            @DefaultValue("") @QueryParam("lastNameQuery") String surname)
     {
-        if(surname.equals("") && !name.equals(""))
-        {
-            List<Student> result = datastore.find(Student.class).field("name").equal(name).asList();
+        if(!surname.equals("") && !name.equals("")){
+            List<Student> result = datastore.find(Student.class)
+                    .field("surname").equal(surname)
+                    .field("firstName").equal(name).asList();
             if (result.size() > 0)
                 return Response.ok(result).build();
         }
-        else if(!surname.equals("") && name.equals("")){
+        else if(!surname.equals("")){
             List<Student> result = datastore.find(Student.class).field("surname").equal(surname).asList();
             if (result.size() > 0)
                 return Response.ok(result).build();
         }
-        else if(!surname.equals("") && !name.equals("")){
-            List<Student> result = datastore.find(Student.class)
-                    .field("surname").equal(surname)
-                    .field("name").equal(name).asList();
+        else if(!name.equals(""))
+        {
+            List<Student> result = datastore.find(Student.class).field("name").equal(name).asList();
             if (result.size() > 0)
                 return Response.ok(result).build();
         }

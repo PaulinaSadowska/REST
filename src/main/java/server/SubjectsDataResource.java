@@ -39,7 +39,7 @@ public class SubjectsDataResource
     {
         Subjects subjectsList = new Subjects(datastore.find(Subject.class).asList());
 
-        if(subjectsList.getSubjectsListSize()>0)
+        if (subjectsList.getSubjectsListSize() > 0)
             return Response.ok(subjectsList.getSubjectsList()).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Subjects list is empty").build();
@@ -53,16 +53,16 @@ public class SubjectsDataResource
             @DefaultValue("") @QueryParam("teacherNameQuery") String teacherName)
     {
         Subjects subjectsList;
-        if(!subjectName.equals("")){
-            subjectsList =  new Subjects(datastore.find(Subject.class).field("subjectName").containsIgnoreCase(subjectName).asList());
-        }
-        else if (!teacherName.equals("")){
-            subjectsList = new Subjects(datastore.find(Subject.class).field("teacher").containsIgnoreCase(teacherName).asList());
-        }
-        else{
+        if (!teacherName.equals("") || !subjectName.equals(""))
+        {
+            subjectsList = new Subjects(datastore.find(Subject.class)
+                    .field("subjectName").containsIgnoreCase(subjectName)
+                    .field("teacher").containsIgnoreCase(teacherName).asList());
+        } else
+        {
             subjectsList = new Subjects(datastore.find(Subject.class).asList());
         }
-        if(subjectsList.getSubjectsListSize()>0)
+        if (subjectsList.getSubjectsListSize() > 0)
             return Response.ok(subjectsList.getSubjectsList()).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Subjects list is empty").build();
@@ -74,7 +74,7 @@ public class SubjectsDataResource
     public Response getSubjects(@PathParam("subjectId") int subjectId)
     {
         List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
-        if(result.size()>0)
+        if (result.size() > 0)
             return Response.ok(result.get(0)).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
@@ -86,7 +86,22 @@ public class SubjectsDataResource
     public Response getGrades(@PathParam("subjectId") int subjectId)
     {
         Subjects result = new Subjects(datastore.find(Subject.class).field("subjectId").equal(subjectId).asList());
-        if(result.getSubjectsListSize()>0)
+        if (result.getSubjectsListSize() > 0)
+            return Response.ok(result.getGrades(subjectId).getGrades()).build();
+
+        return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
+    }
+
+    @GET
+    @Path("{subjectId}/grades/search")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getQueriedGrades(@PathParam("subjectId") int subjectId,
+                                     @DefaultValue("") @QueryParam("studentIdQuery") String studentId,
+                                     @DefaultValue("") @QueryParam("gradeQuery") String grade,
+                                     @DefaultValue("") @QueryParam("gradeDateQuery") String gradeDate)
+    {
+        Subjects result = new Subjects(datastore.find(Subject.class).field("subjectId").equal(subjectId).asList());
+        if (result.getSubjectsListSize() > 0)
             return Response.ok(result.getGrades(subjectId).getGrades()).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
@@ -98,7 +113,7 @@ public class SubjectsDataResource
     public Response getStudentGrade(@PathParam("subjectId") int subjectId, @PathParam("studentId") int studentId)
     {
         List<Subject> result = datastore.find(Subject.class).field("subjectId").equal(subjectId).asList();
-        if(result!=null)
+        if (result != null)
             return Response.ok(result.get(0).getGrade(studentId)).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
@@ -108,10 +123,10 @@ public class SubjectsDataResource
     @GET
     @Path("getSubjectsByTeacher")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getSubjectByTeacher( @DefaultValue("") @QueryParam("teacher") String teacherName)
+    public Response getSubjectByTeacher(@DefaultValue("") @QueryParam("teacher") String teacherName)
     {
         List<Subject> result = datastore.find(Subject.class).field("teacher").equal(teacherName).asList();
-        if(result!=null)
+        if (result != null)
             return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
@@ -120,21 +135,22 @@ public class SubjectsDataResource
     @GET
     @Path("getGrades")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getGradesByValue( @DefaultValue("2.0") @QueryParam("grade") double grade,
-                                         @DefaultValue("0") @QueryParam("compare") int compare)
+    public Response getGradesByValue(@DefaultValue("2.0") @QueryParam("grade") double grade,
+                                     @DefaultValue("0") @QueryParam("compare") int compare)
     {
         ArrayList<Grade> result = new ArrayList<Grade>();
         for (Subject subject : datastore.find(Subject.class).asList())
         {
             for (Grade g : subject.getGradesList())
             {
-                if(compareGrade(g.getGrade(), grade, compare)){
+                if (compareGrade(g.getGrade(), grade, compare))
+                {
                     result.add(g);
                 }
             }
         }
 
-        if(result.size()>0)
+        if (result.size() > 0)
             return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
@@ -151,7 +167,7 @@ public class SubjectsDataResource
             subject.setSubjectId(id);
             datastore.save(subject);
             UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-            URI subjectUri = ub.path(id+"").build();
+            URI subjectUri = ub.path(id + "").build();
             return Response.
                     created(subjectUri).
                     entity(subject).
@@ -176,7 +192,7 @@ public class SubjectsDataResource
             if (subject.getGrade(grade.getStudentId()) == null)
             {
                 UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-                URI gradeUri = ub.path(grade.getStudentId()+"").build();
+                URI gradeUri = ub.path(grade.getStudentId() + "").build();
                 grade.setSubjectId(subjectId);
                 Student student = datastore.find(Student.class).field("studentId").equal(grade.getStudentId()).asList().get(0);
                 grade.setStudent(student);
@@ -230,7 +246,7 @@ public class SubjectsDataResource
         if (result.size() > 0)
         {
             Subject subject = result.get(0);
-            if(subject.getGradesList()!=null)
+            if (subject.getGradesList() != null)
             {
                 grade.setSubjectId(subjectId);
                 Student student = datastore.find(Student.class).field("studentId").equal(grade.getStudentId()).asList().get(0);
@@ -284,7 +300,7 @@ public class SubjectsDataResource
         if (result.size() > 0)
         {
             Subject subject = result.get(0);
-            if(subject.getGradesList()!=null)
+            if (subject.getGradesList() != null)
             {
                 if (subject.deleteGrade(studentId))
                 {
@@ -311,7 +327,7 @@ public class SubjectsDataResource
     {
         List<Subject> result = new ArrayList<Subject>();
         result.add(new Subject());
-        while(availableSubjectId<1 || result.size()>0)
+        while (availableSubjectId < 1 || result.size() > 0)
         {
             availableSubjectId++;
             result = datastore.find(Subject.class).field("subjectId").equal(availableSubjectId).asList();
@@ -321,21 +337,19 @@ public class SubjectsDataResource
 
     private boolean compareGrade(double grade, double searchedGrade, int compare)
     {
-        if(compare==0)
+        if (compare == 0)
         {
             if (grade == searchedGrade)
             {
                 return true;
             }
-        }
-        else if(compare<0)
+        } else if (compare < 0)
         {
             if (grade < searchedGrade)
             {
                 return true;
             }
-        }
-        else if(compare>0)
+        } else if (compare > 0)
         {
             if (grade > searchedGrade)
             {

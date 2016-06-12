@@ -1,6 +1,7 @@
 package server.dataObjects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
@@ -31,6 +32,9 @@ public class Student
     @XmlTransient
     private int studentId;
 
+    @Ignore
+    private String studentIdString;
+
     @Id
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
@@ -54,6 +58,7 @@ public class Student
     public Student(int id, String firstName, String surname, Date birthDate)
     {
         this.studentId = id;
+        this.studentIdString = id + "";
         this.firstName = firstName;
         this.surname = surname;
         this.birthDate = birthDate;
