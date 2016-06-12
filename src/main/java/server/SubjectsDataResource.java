@@ -39,7 +39,7 @@ public class SubjectsDataResource
     {
         Subjects subjectsList = new Subjects(datastore.find(Subject.class).asList());
         if(subjectsList.getSubjectsListSize()>0)
-            return Response.ok(subjectsList).build();
+            return Response.ok(subjectsList.getSubjectsList()).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Subjects list is empty").build();
     }
@@ -63,7 +63,7 @@ public class SubjectsDataResource
     {
         Subjects result = new Subjects(datastore.find(Subject.class).field("subjectId").equal(subjectId).asList());
         if(result.getSubjectsListSize()>0)
-            return Response.ok(result.getGrades(subjectId)).build();
+            return Response.ok(result.getGrades(subjectId).getGrades()).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
     }
@@ -102,7 +102,7 @@ public class SubjectsDataResource
         ArrayList<Grade> result = new ArrayList<Grade>();
         for (Subject subject : datastore.find(Subject.class).asList())
         {
-            for (Grade g : subject.getGrades())
+            for (Grade g : subject.getGradesList())
             {
                 if(compareGrade(g.getGrade(), grade, compare)){
                     result.add(g);
@@ -130,9 +130,8 @@ public class SubjectsDataResource
             URI subjectUri = ub.path(id+"").build();
             return Response.
                     created(subjectUri).
-                    status(Response.Status.CREATED).
-                    entity("subject added").
-                    type("text/plain").
+                    entity(subject).
+                    type("application/json").
                     build();
         }
         return Response.status(Response.Status.CONFLICT).
@@ -161,9 +160,8 @@ public class SubjectsDataResource
                 datastore.save(subject);
                 return Response.
                         created(gradeUri).
-                        status(Response.Status.CREATED).
-                        entity("grade added").
-                        type("text/plain").
+                        entity(grade).
+                        type("application/json").
                         build();
             }
             return Response.status(Response.Status.CONFLICT).
@@ -208,7 +206,7 @@ public class SubjectsDataResource
         if (result.size() > 0)
         {
             Subject subject = result.get(0);
-            if(subject.getGrades()!=null)
+            if(subject.getGradesList()!=null)
             {
                 grade.setSubjectId(subjectId);
                 Student student = datastore.find(Student.class).field("studentId").equal(grade.getStudentId()).asList().get(0);
@@ -262,7 +260,7 @@ public class SubjectsDataResource
         if (result.size() > 0)
         {
             Subject subject = result.get(0);
-            if(subject.getGrades()!=null)
+            if(subject.getGradesList()!=null)
             {
                 if (subject.deleteGrade(studentId))
                 {

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import server.ObjectIdJaxbAdapter;
@@ -26,9 +25,8 @@ public class Student
 {
     @InjectLink(resource = StudentsDataResource.class, method = "getStudent",
             bindings = {@Binding(name = "studentId", value = "${instance.studentId}")}, style = InjectLink.Style.ABSOLUTE)
-    @XmlElement(name = "view")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    Link view; //will hold the link to view account details
+    Link link; //will hold the link to view account details
 
     @XmlTransient
     private int studentId;
@@ -38,7 +36,7 @@ public class Student
     private ObjectId id;
 
     @NotNull
-    private String name;
+    private String firstName;
 
     @NotNull
     private String surname;
@@ -53,17 +51,17 @@ public class Student
     {
     }
 
-    public Student(int id, String name, String surname, Date birthDate)
+    public Student(int id, String firstName, String surname, Date birthDate)
     {
         this.studentId = id;
-        this.name = name;
+        this.firstName = firstName;
         this.surname = surname;
         this.birthDate = birthDate;
     }
 
-    public String getName()
+    public String getFirstName()
     {
-        return name;
+        return firstName;
     }
 
     public String getSurname()
@@ -77,9 +75,9 @@ public class Student
     }
 
 
-    public void setName(String name)
+    public void setFirstName(String firstName)
     {
-        this.name = name;
+        this.firstName = firstName;
     }
 
     public void setSurname(String surname)
@@ -112,5 +110,15 @@ public class Student
     public void setId(ObjectId id)
     {
         this.id = id;
+    }
+
+    public Link getLink()
+    {
+        return link;
+    }
+
+    public void setLink(Link link)
+    {
+        this.link = link;
     }
 }

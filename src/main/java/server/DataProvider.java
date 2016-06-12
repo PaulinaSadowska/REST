@@ -45,13 +45,13 @@ public class DataProvider
         studentsList.addStudent(student3);
 
         Subject subject1 = new Subject(1, "Czarna magia", "Dumbledore");
-        subject1.addGrade(new Grade(2.0, new SimpleDate(2016, 3, 4), 1, student1));
-        subject1.addGrade(new Grade(4.0, new SimpleDate(2016, 4, 1), 1, student2));
+        subject1.addGrade(new Grade(2.0, DateUtils.getDate(2002, 3, 11), 1, student1));
+        subject1.addGrade(new Grade(4.0, DateUtils.getDate(1993, 3, 21), 1, student2));
         subjectsList.addSubject(subject1);
 
         Subject subject2 = new Subject(2, "Cokolwiek", "Ktokolwiek");
-        subject2.addGrade(new Grade(3.0, new SimpleDate(2016, 4, 6), 2, student2));
-        subject2.addGrade(new Grade(5.0, new SimpleDate(2016, 4, 6), 2, student3));
+        subject2.addGrade(new Grade(3.0, DateUtils.getDate(2013, 7, 1), 2, student2));
+        subject2.addGrade(new Grade(5.0, DateUtils.getDate(20163, 3, 4), 2, student3));
         subjectsList.addSubject(subject2);
     }
 }

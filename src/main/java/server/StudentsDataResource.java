@@ -35,11 +35,16 @@ public class StudentsDataResource
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getAllStudents()
+    public Response getAllStudents(
+            @DefaultValue("0") @QueryParam("studentIdQuery") int studentIdQuery,
+            @DefaultValue("") @QueryParam("firstNameQuery") String name,
+            @DefaultValue("") @QueryParam("lastNameQuery") String surname,
+            @QueryParam("birthDateQuery") Date birthDate)
+          //  @DefaultValue("0") @QueryParam("comparatorQuery") int comparator)
     {
         Students result = new Students(datastore.find(Student.class).asList());
         if(result.getStudentsList().size()>0)
-            return Response.ok(result).build();
+            return Response.ok(result.getStudentsList()).build();
 
         return Response.status(Response.Status.NOT_FOUND).entity("Students list is empty").build();
     }
@@ -62,8 +67,8 @@ public class StudentsDataResource
     @Path("getByName")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getByName(
-            @DefaultValue("") @QueryParam("name") String name,
-        @DefaultValue("") @QueryParam("surname") String surname)
+            @DefaultValue("") @QueryParam("firstNameQuery") String name,
+        @DefaultValue("") @QueryParam("lastNameQuery") String surname)
     {
         if(surname.equals("") && !name.equals(""))
         {
@@ -91,9 +96,10 @@ public class StudentsDataResource
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getByBirthDate(
-            @QueryParam("date") Date date,
+            @QueryParam("birthDateQuery") Date date,
             @DefaultValue("0") @QueryParam("comparator") int comparator)
     {
+        //todo - date less and more problem
         List<Student> result = new ArrayList<Student>();
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(date);
@@ -102,6 +108,8 @@ public class StudentsDataResource
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             Date startDate=calendar.getTime();
             calendar.set(Calendar.HOUR_OF_DAY, 23);
+            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.SECOND, 59);
             Date endDate = calendar.getTime();
             Query<Student> query = datastore.find(Student.class);
             query.and(
@@ -130,6 +138,7 @@ public class StudentsDataResource
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addStudent(@NotNull @Valid Student student) throws URISyntaxException
     {
         List<Student> result = datastore.find(Student.class).field("studentId").equal(student.getStudentId()).asList();
@@ -142,9 +151,8 @@ public class StudentsDataResource
             URI userUri = ub.path(id + "").build();
             return Response.
                     created(userUri).
-                    status(Response.Status.CREATED).
-                    entity("student added").
-                    type("text/plain").
+                    entity(student).
+                    type("application/json").
                     build();
         }
         return Response.status(Response.Status.CONFLICT).

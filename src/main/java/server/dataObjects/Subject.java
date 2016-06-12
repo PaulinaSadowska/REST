@@ -14,10 +14,12 @@ import server.SubjectsDataResource;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -31,9 +33,9 @@ public class Subject
             bindings ={
                     @Binding(name = "subjectId", value = "${instance.subjectId}")
             }, style =  InjectLink.Style.ABSOLUTE)
-    @XmlElement(name="view")
+    @XmlElement(name="link")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    Link view; //will hold the link to view account details
+    Link link; //will hold the link to view account details
 
     private int subjectId;
 
@@ -42,7 +44,7 @@ public class Subject
     private ObjectId id;
 
     @NotNull
-    private String name;
+    private String subjectName;
 
     @NotNull
     private String teacher;
@@ -57,19 +59,19 @@ public class Subject
     public Subject(int subjectId, String name, String teacher)
     {
         this.subjectId = subjectId;
-        this.name = name;
+        this.subjectName = name;
         this.teacher = teacher;
         grades = new ArrayList<Grade>();
     }
 
-    public String getName()
+    public String getSubjectName()
     {
-        return name;
+        return subjectName;
     }
 
-    public void setName(String name)
+    public void setSubjectName(String subjectName)
     {
-        this.name = name;
+        this.subjectName = subjectName;
     }
 
     public String getTeacher()
@@ -87,7 +89,7 @@ public class Subject
         grades.add(grade);
     }
 
-    public ArrayList<Grade> getGrades()
+    public ArrayList<Grade> getGradesList()
     {
         return grades;
     }
@@ -101,7 +103,7 @@ public class Subject
     {
         for (Grade g : grades)
         {
-            if (g.getStudentId() == studentId)
+            if (g.getStudent().getStudentId() == studentId)
             {
                 return g;
             }
@@ -114,7 +116,7 @@ public class Subject
     {
         for (Grade g : grades)
         {
-            if (g.getStudentId() == grade.getStudentId())
+            if (g.getStudent().getStudentId() == grade.getStudent().getStudentId())
             {
                 grades.remove(g);
                 grades.add(grade);
@@ -154,5 +156,15 @@ public class Subject
     public void setId(ObjectId id)
     {
         this.id = id;
+    }
+
+    public Link getLink()
+    {
+        return link;
+    }
+
+    public void setLink(Link link)
+    {
+        this.link = link;
     }
 }

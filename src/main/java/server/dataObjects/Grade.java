@@ -1,5 +1,6 @@
 package server.dataObjects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
@@ -15,6 +16,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Date;
 
 /**
  * Created by Paulina Sadowska on 15.04.2016.
@@ -31,30 +33,32 @@ public class Grade
             }, style =  InjectLink.Style.ABSOLUTE)
     @XmlElement(name="gradeView")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    Link gradeView; //will hold the link to view account details
+    Link link; //will hold the link to view account details
 
     @NotNull
     @DecimalMin("2.0")
     @DecimalMax("5.0")
     private double grade;
 
-    // @NotNull
-   // private int studentId;
+    private int studentId;
+
     @Reference
     private Student student;
 
 
     @NotNull
-    private SimpleDate date;
+    @JsonFormat(shape=JsonFormat.Shape.STRING,
+            pattern="yyyy-MM-dd", timezone="CET")
+    private Date gradeDate;
 
     private int subjectId;
 
     public Grade(){}
 
-    public Grade(double grade, SimpleDate date, int subjectId, Student student){
+    public Grade(double grade, Date gradeDate, int subjectId, Student student){
         this.grade = (int)grade;
-        this.date = date;
-       // this.studentId = studentId;
+        this.gradeDate = gradeDate;
+        this.studentId = student.getStudentId();
         this.student = student;
         this.subjectId = subjectId;
     }
@@ -63,18 +67,18 @@ public class Grade
     {
         return grade;
     }
-    public SimpleDate getDate()
+    public Date getGradeDate()
     {
-        return date;
+        return gradeDate;
     }
     public int getStudentId()
     {
-        return student.getStudentId();
+        return studentId;
     }
 
-    public void setDate(SimpleDate date)
+    public void setGradeDate(Date date)
     {
-        this.date = date;
+        this.gradeDate = date;
     }
     public void setGrade(double grade)
     {
@@ -99,5 +103,15 @@ public class Grade
     public void setStudent(Student student)
     {
         this.student = student;
+    }
+
+    public Link getLink()
+    {
+        return link;
+    }
+
+    public void setLink(Link link)
+    {
+        this.link = link;
     }
 }

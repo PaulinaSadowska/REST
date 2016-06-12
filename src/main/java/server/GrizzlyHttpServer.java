@@ -15,8 +15,8 @@ public class GrizzlyHttpServer
 
     public static void main(String[] args) throws Exception
     {
-        URI baseUri = UriBuilder.fromUri("http://localhost/").port(8000).build();
-        ResourceConfig config = new ResourceConfig(StudentsDataResource.class, SubjectsDataResource.class);
+        URI baseUri = UriBuilder.fromUri("http://localhost/").port(8100).build();
+        ResourceConfig config = new ResourceConfig(StudentsDataResource.class, SubjectsDataResource.class, CustomHeaders.class);
         config.register(new DateParamConverterProvider("yyyy-MM-dd"));
         config.packages("org.glassfish.jersey.examples.linking", "com.fasterxml.jackson.jaxrs").
                 register(DeclarativeLinkingFeature.class);

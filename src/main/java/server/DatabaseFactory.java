@@ -54,12 +54,12 @@ public class DatabaseFactory
         List<Student> students  = datastore.find(Student.class).asList();
         for (Student student : students)
         {
-            System.out.println(student.getName() + " " + student.getSurname());
+            System.out.println(student.getFirstName() + " " + student.getSurname());
         }
         List<Subject> subjects = datastore.find(Subject.class).asList();
         for (Subject subject : subjects)
         {
-            System.out.println(subject.getName() + " " + subject.getTeacher());
+            System.out.println(subject.getSubjectName() + " " + subject.getTeacher());
         }
     }
 

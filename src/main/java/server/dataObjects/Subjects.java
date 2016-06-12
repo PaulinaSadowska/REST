@@ -69,7 +69,7 @@ public class Subjects
     {
         Subject subject = getSubject(subjectId);
         if(subject!=null)
-            return new Grades(subject.getGrades());
+            return new Grades(subject.getGradesList());
 
         return null;
 
