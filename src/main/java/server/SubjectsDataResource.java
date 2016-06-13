@@ -100,9 +100,25 @@ public class SubjectsDataResource
                                      @DefaultValue("") @QueryParam("gradeQuery") String grade,
                                      @DefaultValue("") @QueryParam("gradeDateQuery") String gradeDate)
     {
-        Subjects result = new Subjects(datastore.find(Subject.class).field("subjectId").equal(subjectId).asList());
-        if (result.getSubjectsListSize() > 0)
-            return Response.ok(result.getGrades(subjectId).getGrades()).build();
+        ArrayList<Grade> result = new ArrayList<Grade>();
+        for (Subject subject : datastore.find(Subject.class).field("subjectId").equal(subjectId).asList())
+        {
+            for (Grade g : subject.getGradesList())
+            {
+                if ((g.getGrade()+"").contains(grade))
+                {
+                    if((g.getStudentId()+"").contains(studentId))
+                    {
+                        if(g.getGradeDateString().contains(gradeDate))
+                        {
+                            result.add(g);
+                        }
+                    }
+                }
+            }
+        }
+        if (result.size() > 0)
+            return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).type("text/plain").entity("Not found").build();
     }

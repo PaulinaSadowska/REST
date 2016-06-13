@@ -1,12 +1,15 @@
 package server.dataObjects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
+import org.mongodb.morphia.converters.IntegerConverter;
+import server.DateParamConverterProvider;
 import server.ObjectIdJaxbAdapter;
 import server.SubjectsDataResource;
 
@@ -16,6 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -41,6 +45,7 @@ public class Grade
     private double grade;
 
     private int studentId;
+
 
     @Reference
     private Student student;
@@ -113,5 +118,11 @@ public class Grade
     public void setLink(Link link)
     {
         this.link = link;
+    }
+
+    public String getGradeDateString()
+    {
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(gradeDate);
+        return date;
     }
 }
