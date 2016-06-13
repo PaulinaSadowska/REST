@@ -5,6 +5,7 @@ import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import server.dataObjects.*;
+import server.utils.DateUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -109,7 +110,7 @@ public class SubjectsDataResource
                 {
                     if((g.getStudentId()+"").contains(studentId))
                     {
-                        if(g.getGradeDateString().contains(gradeDate))
+                        if(DateUtils.getDateString(g.getGradeDate()).contains(gradeDate))
                         {
                             result.add(g);
                         }

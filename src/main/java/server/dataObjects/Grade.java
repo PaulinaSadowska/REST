@@ -119,9 +119,4 @@ public class Grade
     {
         this.link = link;
     }
-
-    public String getGradeDateString()
-    {
-        return new SimpleDateFormat("yyyy-MM-dd").format(gradeDate);
-    }
 }

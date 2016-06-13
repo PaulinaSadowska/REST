@@ -1,5 +1,6 @@
 package server.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.zip.Inflater;
@@ -9,9 +10,16 @@ import java.util.zip.Inflater;
  */
 public class DateUtils
 {
-    public static Date getDate(int year, int month, int day){
+    public static Date getDate(int year, int month, int day)
+    {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
         return cal.getTime();
     }
+
+    public static String getDateString(Date date)
+    {
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+    }
+
 }

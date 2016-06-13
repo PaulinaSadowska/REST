@@ -4,6 +4,7 @@ import com.sun.istack.internal.Nullable;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import server.dataObjects.*;
+import server.utils.DateUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -62,7 +63,7 @@ public class StudentsDataResource
         ArrayList<Student> result = new ArrayList<Student>();
         for (Student student : nameResult)
         {
-            if(student.getBirthDateString().contains(birthDate)){
+            if(DateUtils.getDateString(student.getBirthDate()).contains(birthDate)){
                 result.add(student);
             }
         }

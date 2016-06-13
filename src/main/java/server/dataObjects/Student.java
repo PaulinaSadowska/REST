@@ -80,12 +80,6 @@ public class Student
         return birthDate;
     }
 
-    public String getBirthDateString()
-    {
-        String date = new SimpleDateFormat("yyyy-MM-dd").format(birthDate);
-        return date;
-    }
-
     public void setFirstName(String firstName)
     {
         this.firstName = firstName;
