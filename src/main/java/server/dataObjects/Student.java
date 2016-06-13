@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -79,6 +80,11 @@ public class Student
         return birthDate;
     }
 
+    public String getBirthDateString()
+    {
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(birthDate);
+        return date;
+    }
 
     public void setFirstName(String firstName)
     {

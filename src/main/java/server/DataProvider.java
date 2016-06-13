@@ -40,18 +40,20 @@ public class DataProvider
         Student student1 = new Student(1, "Kasia", "Kowalska", DateUtils.getDate(1993, 3, 1));
         Student student2 = new Student(2, "Pawel", "Kkkk", DateUtils.getDate(1991, 8, 2));
         Student student3 = new Student(3, "Rafał", "Arasz", DateUtils.getDate(1992, 12, 16));
+        Student student4 = new Student(4, "Łukasz", "Nowak", DateUtils.getDate(2016, 6, 6));
         studentsList.addStudent(student1);
         studentsList.addStudent(student2);
         studentsList.addStudent(student3);
+        studentsList.addStudent(student4);
 
         Subject subject1 = new Subject(1, "Czarna magia", "Dumbledore");
-        subject1.addGrade(new Grade(2.0, DateUtils.getDate(2002, 3, 11), 1, student1));
-        subject1.addGrade(new Grade(4.0, DateUtils.getDate(1993, 3, 21), 1, student2));
+        subject1.addGrade(new Grade(2.0, DateUtils.getDate(2002, 6, 11), 1, student1));
+        subject1.addGrade(new Grade(4.0, DateUtils.getDate(2016, 6, 21), 1, student2));
         subjectsList.addSubject(subject1);
 
         Subject subject2 = new Subject(2, "Cokolwiek", "Ktokolwiek");
-        subject2.addGrade(new Grade(3.0, DateUtils.getDate(2013, 7, 1), 2, student2));
-        subject2.addGrade(new Grade(5.0, DateUtils.getDate(20163, 3, 4), 2, student3));
+        subject2.addGrade(new Grade(3.0, DateUtils.getDate(2016, 6, 1), 2, student2));
+        subject2.addGrade(new Grade(5.0, DateUtils.getDate(2016, 6, 4), 2, student3));
         subjectsList.addSubject(subject2);
     }
 }

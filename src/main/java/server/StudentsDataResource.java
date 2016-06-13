@@ -54,14 +54,20 @@ public class StudentsDataResource
             @DefaultValue("") @QueryParam("lastNameQuery") String surname,
             @DefaultValue("") @QueryParam("birthDateQuery") String birthDate)
     {
-        Students result = new Students(datastore.find(Student.class).
+        List<Student> nameResult = datastore.find(Student.class).
                 field("firstName").containsIgnoreCase(name).
                 field("surname").containsIgnoreCase(surname).
                 field("studentIdString").containsIgnoreCase(studentIdQuery)
-                .field("birthDate").containsIgnoreCase(birthDate)
-                .asList());
-        if(result.getStudentsList().size()>0)
-            return Response.ok(result.getStudentsList()).build();
+                .asList();
+        ArrayList<Student> result = new ArrayList<Student>();
+        for (Student student : nameResult)
+        {
+            if(student.getBirthDateString().contains(birthDate)){
+                result.add(student);
+            }
+        }
+        if(result.size()>0)
+            return Response.ok(result).build();
 
         return Response.status(Response.Status.NOT_FOUND).entity("Students list is empty").build();
     }

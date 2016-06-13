@@ -122,7 +122,6 @@ public class Grade
 
     public String getGradeDateString()
     {
-        String date = new SimpleDateFormat("yyyy-MM-dd").format(gradeDate);
-        return date;
+        return new SimpleDateFormat("yyyy-MM-dd").format(gradeDate);
     }
 }
