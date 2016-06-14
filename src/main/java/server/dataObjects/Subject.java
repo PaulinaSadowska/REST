@@ -1,21 +1,25 @@
 package server.dataObjects;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 import server.ObjectIdJaxbAdapter;
+import server.StudentsDataResource;
 import server.SubjectsDataResource;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -38,7 +42,7 @@ public class Subject
     @Id
     @XmlTransient
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
-    private ObjectId subjId;
+    private ObjectId id;
 
     @NotNull
     private String subjectName;
@@ -145,14 +149,14 @@ public class Subject
     }
 
     @XmlTransient
-    public ObjectId getSubjId()
+    public ObjectId getId()
     {
-        return subjId;
+        return id;
     }
-    
-    public void setSubjId(ObjectId subjId)
+
+    public void setId(ObjectId id)
     {
-        this.subjId = subjId;
+        this.id = id;
     }
 
     public Link getLink()

@@ -1,5 +1,7 @@
 package server;
 
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import server.dataObjects.*;
@@ -9,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -237,7 +240,7 @@ public class SubjectsDataResource
         if (result.size() > 0)
         {
             Subject subjectToEdit = result.get(0);
-            subject.setSubjId(subjectToEdit.getSubjId());
+            subject.setId(subjectToEdit.getId());
             datastore.save(subject);
             return Response.status(Response.Status.OK).
                     entity("subject edited successfully").
