@@ -37,6 +37,7 @@ public class Student
     private String studentIdString;
 
     @Id
+    @XmlTransient
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
 

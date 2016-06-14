@@ -74,6 +74,7 @@ public class DatabaseFactory
     public static void resetSubjectsRecords(Datastore datastore){
         final Query<Subject> subjects = datastore.createQuery(Subject.class);
         datastore.delete(subjects);
+       // datastore.getCollection(Subject.class).drop();
         for(Subject s : DataProvider.getInstance().getSubjectsList().getSubjectsList()){
             datastore.save(s);
         }
