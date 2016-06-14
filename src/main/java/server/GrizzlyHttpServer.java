@@ -3,6 +3,7 @@ package server;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.mongodb.morphia.Datastore;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
@@ -24,6 +25,7 @@ public class GrizzlyHttpServer
         ResourceConfig config = new ResourceConfig().packages("server.dataObjects")
                 .register(DeclarativeLinkingFeature.class).register(dateParamConverterProvider).register(CustomHeaders.class);*/
         config.register(CustomHeaders.class);
+      //  DatabaseFactory.getInstance().getDatastore();
         GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
     }
 }

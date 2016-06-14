@@ -1,5 +1,6 @@
 package server.dataObjects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
@@ -41,6 +42,7 @@ public class Subject
 
     @Id
     @XmlTransient
+    @JsonIgnore
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
 

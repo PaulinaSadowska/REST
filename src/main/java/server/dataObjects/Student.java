@@ -1,6 +1,7 @@
 package server.dataObjects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.Binding;
@@ -38,6 +39,7 @@ public class Student
 
     @Id
     @XmlTransient
+    @JsonIgnore
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
 

@@ -48,8 +48,8 @@ public class DatabaseFactory
         datastore = morphia.createDatastore(mongoClient, DATABASE_NAME);
         datastore.ensureIndexes();
 
-        resetStudentsRecords(datastore);
-        resetSubjectsRecords(datastore);
+        //resetStudentsRecords(datastore);
+        //resetSubjectsRecords(datastore);
 
         List<Student> students  = datastore.find(Student.class).asList();
         for (Student student : students)
@@ -74,7 +74,6 @@ public class DatabaseFactory
     public static void resetSubjectsRecords(Datastore datastore){
         final Query<Subject> subjects = datastore.createQuery(Subject.class);
         datastore.delete(subjects);
-       // datastore.getCollection(Subject.class).drop();
         for(Subject s : DataProvider.getInstance().getSubjectsList().getSubjectsList()){
             datastore.save(s);
         }
