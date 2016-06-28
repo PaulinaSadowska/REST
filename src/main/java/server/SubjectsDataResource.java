@@ -211,15 +211,24 @@ public class SubjectsDataResource
                 UriBuilder ub = uriInfo.getAbsolutePathBuilder();
                 URI gradeUri = ub.path(grade.getStudentId() + "").build();
                 grade.setSubjectId(subjectId);
-                Student student = datastore.find(Student.class).field("studentId").equal(grade.getStudentId()).asList().get(0);
-                grade.setStudent(student);
-                subject.addGrade(grade);
-                datastore.save(subject);
-                return Response.
-                        created(gradeUri).
-                        entity(grade).
-                        type("application/json").
-                        build();
+                List<Student> students = datastore.find(Student.class).field("studentId").equal(grade.getStudentId()).asList();
+                if(result.size()>0)
+                {
+                    grade.setStudent(students.get(0));
+                    subject.addGrade(grade);
+                    datastore.save(subject);
+                    return Response.
+                            created(gradeUri).
+                            entity(grade).
+                            type("application/json").
+                            build();
+                }
+                else{
+                    return Response.status(Response.Status.CONFLICT).
+                            entity("student not found").
+                            type("text/plain").
+                            build();
+                }
             }
             return Response.status(Response.Status.CONFLICT).
                     entity("grade already exists").

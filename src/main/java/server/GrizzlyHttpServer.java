@@ -25,7 +25,7 @@ public class GrizzlyHttpServer
         ResourceConfig config = new ResourceConfig().packages("server.dataObjects")
                 .register(DeclarativeLinkingFeature.class).register(dateParamConverterProvider).register(CustomHeaders.class);*/
         config.register(CustomHeaders.class);
-      //  DatabaseFactory.getInstance().getDatastore();
+        //DatabaseFactory.getInstance().getDatastore();
         GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
     }
 }

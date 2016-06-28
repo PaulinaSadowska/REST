@@ -53,7 +53,7 @@ public class Subject
     private String teacher;
 
     @Embedded
-    public ArrayList<Grade> grades;
+    public ArrayList<Grade> grades = new ArrayList<Grade>();
 
     public Subject()
     {
@@ -64,7 +64,6 @@ public class Subject
         this.subjectId = subjectId;
         this.subjectName = name;
         this.teacher = teacher;
-        grades = new ArrayList<Grade>();
     }
 
     public String getSubjectName()

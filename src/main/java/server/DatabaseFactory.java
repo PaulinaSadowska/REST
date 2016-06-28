@@ -48,8 +48,8 @@ public class DatabaseFactory
         datastore = morphia.createDatastore(mongoClient, DATABASE_NAME);
         datastore.ensureIndexes();
 
-        //resetStudentsRecords(datastore);
-        //resetSubjectsRecords(datastore);
+       // resetStudentsRecords(datastore);
+       // resetSubjectsRecords(datastore);
 
         List<Student> students  = datastore.find(Student.class).asList();
         for (Student student : students)
